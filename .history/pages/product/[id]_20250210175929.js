@@ -12,6 +12,7 @@ import CartIcon from "@/components/icons/CartIcon";
 import { useContext, useState, useEffect } from "react";
 import { CartContext } from "@/components/CartContext";
 import Breadcrumb from "@/components/Breadcrumb";
+import ReactImageMagnify from "react-image-magnify";
 import Footer from "@/components/Footer";
 import axios from "axios";
 import ReviewCard from "@/components/ReviewCard";

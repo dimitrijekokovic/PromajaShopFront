@@ -12,6 +12,8 @@ import CartIcon from "@/components/icons/CartIcon";
 import { useContext, useState, useEffect } from "react";
 import { CartContext } from "@/components/CartContext";
 import Breadcrumb from "@/components/Breadcrumb";
+import { Controlled as Zoom } from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 import Footer from "@/components/Footer";
 import axios from "axios";
 import ReviewCard from "@/components/ReviewCard";
