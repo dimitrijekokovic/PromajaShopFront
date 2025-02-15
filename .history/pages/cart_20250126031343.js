@@ -9,7 +9,6 @@ import styled from "styled-components";
 import Input from "@/components/Input";
 import Modal, { ModalHeader, ModalText, ButtonWrapper, ModalButton } from "@/components/Modal";
 import Footer from "@/components/Footer";
-import Link from "next/link";
 
 const ColumnsWrapper = styled.div`
      display: grid;
@@ -423,11 +422,7 @@ export default function CartPage() {
                     <ModalText>Morate biti registrovani kako biste nastavili sa porudžbinom.</ModalText>
                     <ButtonWrapper>
                         <ModalButton primary>
-                        <Link href="/register" legacyBehavior>
-                            <span style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>
-                                Registrujte se
-                            </span>
-                        </Link>
+                            <a href="/register" style={{ color: 'inherit', textDecoration: 'none' }}>Registrujte se</a>
                         </ModalButton>
                     </ButtonWrapper>
                 </Modal>

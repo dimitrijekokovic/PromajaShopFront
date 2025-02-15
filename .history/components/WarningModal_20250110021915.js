@@ -64,11 +64,9 @@ const Modal = ({ show, onClose }) => {
         <ButtonWrapper>
           <ModalButton onClick={onClose}>Zatvori</ModalButton>
           <ModalButton primary>
-          <Link href="/register">
-            <a style={{ color: "inherit", textDecoration: "none" }}>
+            <a href="/register" style={{ color: "inherit", textDecoration: "none" }}>
               Registrujte se
             </a>
-            </Link>
           </ModalButton>
         </ButtonWrapper>
       </ModalContent>

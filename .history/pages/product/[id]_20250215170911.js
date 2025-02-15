@@ -451,7 +451,7 @@ export default function ProductPage({ product, similarProducts }) {
             <ButtonWrapper>
               <ModalButton primary>
                 <Link href="/register" legacyBehavior>
-                <span  style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}>
+                <span  style={{ color: "inherit", textDecoration: "none" }}>
                   Registrujte se
                 </span>
                 </Link>

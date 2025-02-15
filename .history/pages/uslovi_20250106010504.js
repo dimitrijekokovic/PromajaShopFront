@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Center from "@/components/Center";
-import Link from "next/link";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -108,17 +107,12 @@ export default function Uslovi() {
         </Section>
 
         <Section>
-  <h2>7. Politika privatnosti</h2>
-  <p>
-    Prikupljamo i obrađujemo lične podatke korisnika u skladu s važećim zakonima o zaštiti podataka. Detalji
-    su dostupni u našoj{" "}
-    <Link href="/privatnost">
-      <span style={{ color: "inherit", textDecoration: "underline", cursor: "pointer" }}>
-        Politici privatnosti
-      </span>
-    </Link>.
-  </p>
-</Section>
+          <h2>7. Politika privatnosti</h2>
+          <p>
+            Prikupljamo i obrađujemo lične podatke korisnika u skladu s važećim zakonima o zaštiti podataka. Detalji
+            su dostupni u našoj <a href="/privatnost">Politici privatnosti</a>.
+          </p>
+        </Section>
 
         <Section>
           <h2>8. Kontakt</h2>

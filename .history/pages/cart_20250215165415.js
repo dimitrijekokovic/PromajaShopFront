@@ -423,11 +423,9 @@ export default function CartPage() {
                     <ModalText>Morate biti registrovani kako biste nastavili sa porudžbinom.</ModalText>
                     <ButtonWrapper>
                         <ModalButton primary>
-                        <Link href="/register" legacyBehavior>
-                            <span style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>
-                                Registrujte se
-                            </span>
-                        </Link>
+                            <Link href="/register" >
+                                <a style={{ color: 'inherit', textDecoration: 'none' }}>Registrujte se</a>
+                            </Link>
                         </ModalButton>
                     </ButtonWrapper>
                 </Modal>

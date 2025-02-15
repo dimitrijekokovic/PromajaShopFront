@@ -29,7 +29,7 @@ export function CartContextProvider({ children }) {
         ls.removeItem("user");
       }
     }
-  }, [ls]);
+  }, []);
 
   // Učitavanje proizvoda u korpi iz localStorage
   useEffect(() => {

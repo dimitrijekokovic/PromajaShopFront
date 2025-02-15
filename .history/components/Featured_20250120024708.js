@@ -5,7 +5,6 @@ import ButtonLink from "./ButtonLink";
 import CartIcon from "./icons/CartIcon";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
-import Image from "next/image";
 
 const Bg = styled.div`
   background-color: #222;
@@ -90,7 +89,7 @@ export default function Featured({ product }) {
         <ColumnsWrapper>
           <Column>
             <ImageWrapper>
-              <Image
+              <img
                 src="https://dimitrije-next-ecommerce.s3.amazonaws.com/1733697778002.png"
                 alt="image"
               />
@@ -98,7 +97,7 @@ export default function Featured({ product }) {
           </Column>
           <Column>
             <div>
-              <Title>&quot;PF Vobler&quot; – Tvoja prednost na vodi</Title>
+              <Title>"PF Vobler" – Tvoja prednost na vodi</Title>
               <Desc>
                 Predstavljamo vam <b>PF Vobler</b> – prvu univerzalnu varalicu iz naše <b>PromajaFishing</b> kolekcije,
                 dizajniranu s ljubavlju prema ribolovu i pažnjom na svaki detalj. Ručno izrađena, ova varalica kombinuje

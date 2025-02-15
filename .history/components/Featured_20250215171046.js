@@ -98,7 +98,7 @@ export default function Featured({ product }) {
           </Column>
           <Column>
             <div>
-              <Title>&quot;PF Vobler&quot; – Tvoja prednost na vodi</Title>
+              <Title>"PF Vobler" – Tvoja prednost na vodi</Title>
               <Desc>
                 Predstavljamo vam <b>PF Vobler</b> – prvu univerzalnu varalicu iz naše <b>PromajaFishing</b> kolekcije,
                 dizajniranu s ljubavlju prema ribolovu i pažnjom na svaki detalj. Ručno izrađena, ova varalica kombinuje

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Center from "./Center";
 import { useRouter } from "next/router";
-import Image from "next/image";
 
 const CategoriesContainer = styled.div`
   display: grid;
@@ -94,27 +93,27 @@ export default function CategoriesSection({ categories }) {
       <SectionTitle>Kategorije proizvoda</SectionTitle>
       <CategoriesContainer>
         <CategoryItem area="cat1" onClick={() => handleCategoryClick("vobleri")}>
-          <Image src="/vobleri.png" alt="Vobleri" />
+          <img src="/vobleri.png" alt="Vobleri" />
           <h3>Vobleri</h3>
         </CategoryItem>
         <CategoryItem area="cat2" onClick={() => handleCategoryClick("twitchevi")}>
-          <Image src="/twitchevi.png" alt="Twitchevi" />
+          <img src="/twitchevi.png" alt="Twitchevi" />
           <h3>Twitchevi</h3>
         </CategoryItem>
         <CategoryItem area="cat3" onClick={() => handleCategoryClick("kasike")}>
-          <Image src="/kasike.png" alt="Kašike" />
+          <img src="/kasike.png" alt="Kašike" />
           <h3>Kašike</h3>
         </CategoryItem>
         <CategoryItem area="cat4" onClick={() => handleCategoryClick("silikonci")}>
-          <Image src="/silikonci.png" alt="Silikonci" />
+          <img src="/silikonci.png" alt="Silikonci" />
           <h3>Silikonci</h3>
         </CategoryItem>
         <CategoryItem area="cat5" onClick={() => handleCategoryClick("majice")}>
-          <Image src="/majice.png" alt="Majice" />
+          <img src="/majice.png" alt="Majice" />
           <h3>Majice</h3>
         </CategoryItem>
         <CategoryItem area="cat6" onClick={() => handleCategoryClick("glavinjare")}>
-          <Image src="/glavinjare.png" alt="Glavinjare" />
+          <img src="/glavinjare.png" alt="Glavinjare" />
           <h3>Glavinjare</h3>
         </CategoryItem>
       </CategoriesContainer>
