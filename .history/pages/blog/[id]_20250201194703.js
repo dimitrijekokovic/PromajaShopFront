@@ -1,10 +1,9 @@
-import { useRouter } from "next/router";
 import styled from "styled-components";
-import Header from "@/components/Header";
+import Header from "/components/Header";
+import blogPosts from "@/data/blogPosts";
 import Breadcrumb from "@/components/Breadcrumb";
-import Footer from "@/components/Footer";
+import Footer from "/components/Footer";
 
-// 🟢 Stilovi
 const BlogContainer = styled.div`
   padding: 40px;
   max-width: 800px;
@@ -74,30 +73,40 @@ const BlogImage = styled.img`
   }
 `;
 
-// 🟢 BlogPost komponenta (dinamičko učitavanje)
-export default function BlogPost() {
-  const router = useRouter();
-  const { id } = router.query;
 
-  // Ako još uvek nema ID-a (stranica se generiše)
-  if (!id) {
-    return <p>Učitavanje...</p>;
-  }
 
-  // Dinamički učitavamo odgovarajući blog post
-  let post;
-  try {
-    post = require(`./${id}.js`).default; // Dinamički učitava blog fajl
-  } catch (error) {
-    return <p>Blog post ne postoji!</p>;
+
+export async function getStaticPaths() {
+  const paths = blogPosts.map((post) => ({
+    params: { id: post.id.toString() },
+  }));
+  return { paths, fallback: false };
+}
+
+export async function getStaticProps({ params }) {
+  const post = blogPosts.find((post) => post.id === params.id);
+
+  if (!post) {
+    return {
+      notFound: true,
+    };
   }
 
   const breadcrumbItems = [
     { label: "Početna", url: "/" },
     { label: "Blog", url: "/blog" },
-    { label: post.title, url: `/blog/${id}` },
+    { label: post.title, url: `/blog/${post.id}` },
   ];
 
+  return {
+    props: {
+      post,
+      breadcrumbItems,
+    },
+  };
+}
+
+export default function BlogPost({ post, breadcrumbItems }) {
   return (
     <>
       <Header />
@@ -107,9 +116,7 @@ export default function BlogPost() {
       <BlogContainer>
         <Title>{post.title}</Title>
         <Content>
-          {post.content.split("\n").map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
+          <p>{post.content}</p>
         </Content>
       </BlogContainer>
       <Footer />

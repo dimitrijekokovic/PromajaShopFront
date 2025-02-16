@@ -1,10 +1,9 @@
-import { useRouter } from "next/router";
 import styled from "styled-components";
 import Header from "@/components/Header";
+import blogPosts from "@/data/blogPosts";
 import Breadcrumb from "@/components/Breadcrumb";
 import Footer from "@/components/Footer";
 
-// 🟢 Stilovi
 const BlogContainer = styled.div`
   padding: 40px;
   max-width: 800px;
@@ -74,30 +73,11 @@ const BlogImage = styled.img`
   }
 `;
 
-// 🟢 BlogPost komponenta (dinamičko učitavanje)
-export default function BlogPost() {
-  const router = useRouter();
-  const { id } = router.query;
+/** ✅ Ispravljena funkcija `getStaticPaths` */
 
-  // Ako još uvek nema ID-a (stranica se generiše)
-  if (!id) {
-    return <p>Učitavanje...</p>;
-  }
 
-  // Dinamički učitavamo odgovarajući blog post
-  let post;
-  try {
-    post = require(`./${id}.js`).default; // Dinamički učitava blog fajl
-  } catch (error) {
-    return <p>Blog post ne postoji!</p>;
-  }
-
-  const breadcrumbItems = [
-    { label: "Početna", url: "/" },
-    { label: "Blog", url: "/blog" },
-    { label: post.title, url: `/blog/${id}` },
-  ];
-
+/** ✅ Ispravljena komponenta `BlogPost` */
+export default function BlogPost({ post, breadcrumbItems }) {
   return (
     <>
       <Header />

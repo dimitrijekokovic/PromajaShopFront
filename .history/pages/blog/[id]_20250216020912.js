@@ -1,10 +1,9 @@
-import { useRouter } from "next/router";
 import styled from "styled-components";
 import Header from "@/components/Header";
+import blogPosts from "@/data/blogPosts";
 import Breadcrumb from "@/components/Breadcrumb";
 import Footer from "@/components/Footer";
 
-// 🟢 Stilovi
 const BlogContainer = styled.div`
   padding: 40px;
   max-width: 800px;
@@ -74,30 +73,44 @@ const BlogImage = styled.img`
   }
 `;
 
-// 🟢 BlogPost komponenta (dinamičko učitavanje)
-export default function BlogPost() {
-  const router = useRouter();
-  const { id } = router.query;
+/** ✅ Ispravljena funkcija `getStaticPaths` */
+export async function getStaticPaths() {
+  // Kreiramo skup jedinstvenih putanja iz `blogPosts`
+  const uniquePaths = blogPosts
+    .map((post) => post.id.toString())
+    .filter((value, index, self) => self.indexOf(value) === index) // Uklanja duplikate
+    .map((id) => ({ params: { id } }));
 
-  // Ako još uvek nema ID-a (stranica se generiše)
-  if (!id) {
-    return <p>Učitavanje...</p>;
-  }
+  console.log("Generated paths:", uniquePaths); // Debugging
 
-  // Dinamički učitavamo odgovarajući blog post
-  let post;
-  try {
-    post = require(`./${id}.js`).default; // Dinamički učitava blog fajl
-  } catch (error) {
-    return <p>Blog post ne postoji!</p>;
+  return { paths: uniquePaths, fallback: false };
+}
+
+
+/** ✅ Ispravljena funkcija `getStaticProps` */
+export async function getStaticProps({ params }) {
+  const post = blogPosts.find((post) => post.id.toString() === params.id);
+
+  if (!post) {
+    return { notFound: true };
   }
 
   const breadcrumbItems = [
     { label: "Početna", url: "/" },
     { label: "Blog", url: "/blog" },
-    { label: post.title, url: `/blog/${id}` },
+    { label: post.title, url: `/blog/${post.id}` },
   ];
 
+  return {
+    props: {
+      post,
+      breadcrumbItems,
+    },
+  };
+}
+
+/** ✅ Ispravljena komponenta `BlogPost` */
+export default function BlogPost({ post, breadcrumbItems }) {
   return (
     <>
       <Header />
