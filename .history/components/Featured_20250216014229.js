@@ -93,8 +93,6 @@ export default function Featured({ product }) {
               <Image
                 src="https://dimitrije-next-ecommerce.s3.amazonaws.com/1733697778002.png"
                 alt="image"
-                width={300}
-                height={300}
               />
             </ImageWrapper>
           </Column>

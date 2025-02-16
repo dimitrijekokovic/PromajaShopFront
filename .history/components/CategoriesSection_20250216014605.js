@@ -17,7 +17,7 @@ const CategoriesContainer = styled.div`
       "cat1 cat2"
       "cat3 cat4"
       "cat5 cat6";
-    padding: 0 25px;
+    padding: 0 25px; /* Uvlačenje za mobilne uređaje */
   }
 
   @media (max-width: 480px) {
@@ -45,6 +45,18 @@ const CategoryCard = styled.div`
   &:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  img {
+    width: auto;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 10px;
+
+    @media (max-width: 480px) {
+      height: 80px;
+    }
   }
 
   h3 {
@@ -82,27 +94,27 @@ export default function CategoriesSection({ categories }) {
       <SectionTitle>Kategorije proizvoda</SectionTitle>
       <CategoriesContainer>
         <CategoryItem area="cat1" onClick={() => handleCategoryClick("vobleri")}>
-          <Image src="/vobleri.png" alt="Vobleri" width={150} height={150} />
+          <Image src="/vobleri.png" alt="Vobleri" />
           <h3>Vobleri</h3>
         </CategoryItem>
         <CategoryItem area="cat2" onClick={() => handleCategoryClick("twitchevi")}>
-          <Image src="/twitchevi.png" alt="Twitchevi" width={150} height={150} />
+          <Image src="/twitchevi.png" alt="Twitchevi" />
           <h3>Twitchevi</h3>
         </CategoryItem>
         <CategoryItem area="cat3" onClick={() => handleCategoryClick("kasike")}>
-          <Image src="/kasike.png" alt="Kašike" width={150} height={150} />
+          <Image src="/kasike.png" alt="Kašike" />
           <h3>Kašike</h3>
         </CategoryItem>
         <CategoryItem area="cat4" onClick={() => handleCategoryClick("silikonci")}>
-          <Image src="/silikonci.png" alt="Silikonci" width={150} height={150} />
+          <Image src="/silikonci.png" alt="Silikonci" />
           <h3>Silikonci</h3>
         </CategoryItem>
         <CategoryItem area="cat5" onClick={() => handleCategoryClick("majice")}>
-          <Image src="/majice.png" alt="Majice" width={150} height={150} />
+          <Image src="/majice.png" alt="Majice" />
           <h3>Majice</h3>
         </CategoryItem>
         <CategoryItem area="cat6" onClick={() => handleCategoryClick("glavinjare")}>
-          <Image src="/glavinjare.png" alt="Glavinjare" width={150} height={150} />
+          <Image src="/glavinjare.png" alt="Glavinjare" />
           <h3>Glavinjare</h3>
         </CategoryItem>
       </CategoriesContainer>

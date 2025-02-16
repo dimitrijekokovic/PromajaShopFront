@@ -449,14 +449,13 @@ export default function ProductPage({ product, similarProducts }) {
             <ModalHeader>Potrebna registracija</ModalHeader>
             <ModalText>Morate biti registrovani kako biste napisali recenziju.</ModalText>
             <ButtonWrapper>
-            <ModalButton primary>
-    <Link href="/register" passHref>
-        <a style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}>
-            Registrujte se
-        </a>
-    </Link>
-</ModalButton>
-
+              <ModalButton primary>
+                <Link href="/register" legacyBehavior>
+                <span  style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}>
+                  Registrujte se
+                </span>
+                </Link>
+              </ModalButton>
             </ButtonWrapper>
           </Modal>
         )}

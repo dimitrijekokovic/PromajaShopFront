@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaHeart } from "react-icons/fa"; // Ikona srca
 import { useCart } from "./CartContext"; // Kontekst za korpu
-import Image from "next/image";
 
 const ProductWrapper = styled.div`
   position: relative;

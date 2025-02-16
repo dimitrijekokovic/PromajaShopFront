@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaHeart } from "react-icons/fa"; // Ikona srca
 import { useCart } from "./CartContext"; // Kontekst za korpu
-import Image from "next/image";
 
 const ProductWrapper = styled.div`
   position: relative;
@@ -139,7 +138,7 @@ export default function ProductBox({
           >
             <FaHeart />
           </FavoriteIcon>
-          <Image src={images[0]} alt={title} layout="intrinsic" objectFit="contain" />
+          <img src={images[0]} alt={title} />
           {(isOutOfStock || isLowStock) && (
             <StockMessageWrapper isLowStock={isLowStock}>
               {isOutOfStock ? "Nema na stanju!" : "Još malo pa nestalo!"}
