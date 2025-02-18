@@ -91,7 +91,7 @@ export default function Featured({ product }) {
           <Column>
             <ImageWrapper>
               <Image
-                src="https://dimitrije-next-ecommerce.s3.amazonaws.com/1739893983845.jpg"
+                src="https://promaja-shop.vercel.app/_next/image?url=https%3A%2F%2Fdimitrije-next-ecommerce.s3.amazonaws.com%2F1739893983845.jpg&w=96&q=75"
                 alt="image"
                 width={300}
                 height={300}
