@@ -86,7 +86,7 @@ export default function RegisterPage() {
     setLoading(true);
     setError(""); // Resetuj grešku na početku
     try {
-      const response = await axios.post("/api/customAuth/register", formData);
+      const response = await axios.post("http://localhost:3000/api/customAuth/register", formData);
   
       if (response && response.data) {
         const user = {
