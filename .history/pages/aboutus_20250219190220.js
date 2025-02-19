@@ -161,8 +161,8 @@ export default function AboutUs() {
         <Text>
           Priča o <Highlight>PromajaFishing</Highlight> započela je kada su se dvojica drugara iz osnovne škole
           združila upravo zahvaljujući ljubavi prema pecanju. Još od malih nogu, vikendi uz reku i prve avanture s
-          ribolovačkim štapom povezivali su ih sa prirodom i porodicom. Pecanje su zavoleli kroz porodičnu tradiciju,
-           {"\"zarazivši se\""} strašću svojih rođaka i prijatelja.
+          ribolovačkim štapom povezivali su ih sa prirodom i porodicom. Pecanje su zavoleli kroz porodičnu tradiciju, 
+          {"\"zarazivši se\""} strašću svojih rođaka i prijatelja.
         </Text>
         <Text>
           Kako su odrastali, ljubav prema pecanju nije jenjavala. Povremeno su se sastajali, planirali zajedničke
@@ -181,7 +181,7 @@ export default function AboutUs() {
         <Text>
           Shvatili su da mogu da učine mnogo više – da okupe sve zaljubljenike u ribolov na jednom mestu i izgrade
           zajednicu koja deli ljubav prema prirodi, vodi i ovom divnom sportu. Tako je <Highlight>PromajaFishing </Highlight>
-          postao više od brenda – postao je pokret.
+          psotao više od brenda – postao je pokret.
         </Text>
       </Section>
 

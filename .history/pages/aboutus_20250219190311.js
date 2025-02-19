@@ -181,7 +181,7 @@ export default function AboutUs() {
         <Text>
           Shvatili su da mogu da učine mnogo više – da okupe sve zaljubljenike u ribolov na jednom mestu i izgrade
           zajednicu koja deli ljubav prema prirodi, vodi i ovom divnom sportu. Tako je <Highlight>PromajaFishing </Highlight>
-          postao više od brenda – postao je pokret.
+          psotao više od brenda – postao je pokret.
         </Text>
       </Section>
 
