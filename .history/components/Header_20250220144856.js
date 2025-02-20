@@ -10,8 +10,9 @@ import CategoriesDropdown from "./CategoriesDropdown";
 const StyledHeader = styled.header`
   background-color: #222;
   color: #FFA500;
-  padding: 35px 25px; /* Vraćena normalna veličina */
+  padding: 35px 25px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  overflow: visible;
 `;
 
 const Wrapper = styled.div`
@@ -25,12 +26,13 @@ const StyledNav = styled.nav`
   display: flex;
   gap: 20px;
   align-items: center;
+  overflow: visible;
 
   @media (max-width: 768px) {
     display: ${(props) => (props.open ? "flex" : "none")};
     flex-direction: column;
     position: absolute;
-    top: 70px;
+    top: 60px;
     left: 0;
     right: 0;
     background-color: #222;
@@ -46,6 +48,7 @@ const NavLink = styled(Link)`
   text-decoration: none;
   font-size: 16px;
   font-weight: 500;
+  line-height: 40px;
   display: flex;
   align-items: center;
   transition: color 0.3s ease;
@@ -55,7 +58,7 @@ const NavLink = styled(Link)`
   }
 
   @media (max-width: 768px) {
-    display: none; /* Sakrivamo Korpu samo na telefonima */
+    display: none; /* Sakrivamo korpu iz menija na telefonima */
   }
 `;
 
@@ -100,27 +103,23 @@ const HamburgerMenu = styled.div`
   }
 `;
 
-/* Dodali smo poseban div za mobilnu korpu da ne bude u logou */
-const MobileCartWrapper = styled.div`
+/* Ikonica korpe samo za mobilne uređaje */
+const MobileCartIcon = styled(Link)`
   display: none;
+  color: #FFA500;
+  font-size: 22px;
+  position: absolute;
+  left: 15px;
 
   @media (max-width: 768px) {
     display: flex;
-    position: absolute;
-    left: 15px;
+    align-items: center;
   }
 `;
 
-const MobileCartIcon = styled(Link)`
-  color: #FFA500;
-  font-size: 22px;
-  display: flex;
-  align-items: center;
-`;
-
 const LogoWrapper = styled.div`
-  max-width: 180px; /* Vraćena normalna veličina */
-  
+  max-width: 160px;
+
   @media (max-width: 768px) {
     max-width: 140px;
   }
@@ -145,12 +144,10 @@ export default function Header() {
     <StyledHeader>
       <Center>
         <Wrapper>
-          {/* Mobilna Korpa - Premestili smo je van logotipa */}
-          <MobileCartWrapper>
-            <MobileCartIcon href="/cart">
-              <FaShoppingCart />
-            </MobileCartIcon>
-          </MobileCartWrapper>
+          {/* Ikonica korpe samo za telefone */}
+          <MobileCartIcon href="/cart">
+            <FaShoppingCart />
+          </MobileCartIcon>
 
           {/* Logo */}
           <Link href="/">
@@ -177,9 +174,7 @@ export default function Header() {
             <NavLink href="/aboutus">O nama</NavLink>
             <CategoriesDropdown />
             <NavLink href="/products">Svi proizvodi</NavLink>
-
-            {/* Vraćena korpa na desktop verziji */}
-            <NavLink href="/cart">Korpa ({cartProducts?.length || 0})</NavLink>
+            {/* Obrisali smo Korpu iz ovog dela jer je sada ikonca iznad */}
 
             {isLoggedIn ? (
               <LoginButton href="/account">
