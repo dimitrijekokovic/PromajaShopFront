@@ -4,35 +4,34 @@ import Center from "./Center";
 import Image from "next/image";
 import { CartContext } from "./CartContext";
 import { useContext, useState, useEffect } from "react";
-import { FaUserCircle, FaShoppingCart } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import CategoriesDropdown from "./CategoriesDropdown";
 
 const StyledHeader = styled.header`
   background-color: #222;
   color: #FFA500;
-  padding: 20px 25px;
+  padding: 35px 25px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  overflow: visible;
+  overflow: visible; /* Postavi ovako ako postoji problem */
 `;
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
 `;
 
 const StyledNav = styled.nav`
   display: flex;
   gap: 20px;
   align-items: center;
-  overflow: visible;
+    overflow: visible; /* Dodaj ovo */
 
   @media (max-width: 768px) {
     display: ${(props) => (props.open ? "flex" : "none")};
     flex-direction: column;
     position: absolute;
-    top: 60px;
+    top: 70px;
     left: 0;
     right: 0;
     background-color: #222;
@@ -55,10 +54,6 @@ const NavLink = styled(Link)`
 
   &:hover {
     color: #fff;
-  }
-
-  @media (max-width: 768px) {
-    display: none; /* Sakrivamo korpu iz menija na telefonima */
   }
 `;
 
@@ -103,25 +98,11 @@ const HamburgerMenu = styled.div`
   }
 `;
 
-/* Ikonica korpe samo za mobilne uređaje */
-const MobileCartIcon = styled(Link)`
-  display: none;
-  color: #FFA500;
-  font-size: 22px;
-  position: absolute;
-  left: 15px;
-
-  @media (max-width: 768px) {
-    display: flex;
-    align-items: center;
-  }
-`;
-
 const LogoWrapper = styled.div`
-  max-width: 160px;
+  max-width: 150px;
 
   @media (max-width: 768px) {
-    max-width: 140px;
+    max-width: 120px;
   }
 
   img {
@@ -144,37 +125,25 @@ export default function Header() {
     <StyledHeader>
       <Center>
         <Wrapper>
-          {/* Ikonica korpe samo za telefone */}
-          <MobileCartIcon href="/cart">
-            <FaShoppingCart />
-          </MobileCartIcon>
-
-          {/* Logo */}
           <Link href="/">
-            <LogoWrapper>
-              <Image
-                src="/logo.png"
-                alt="PromajaShop Logo"
-                width={240}
-                height={40}
-                priority
-              />
-            </LogoWrapper>
+            <Image
+              src="/logo.png"
+              alt="PromajaShop Logo"
+              width={240}
+              height={30}
+              priority
+            />
           </Link>
-
-          {/* Hamburger meni */}
           <HamburgerMenu onClick={() => setMenuOpen(!menuOpen)}>
             <div />
             <div />
             <div />
           </HamburgerMenu>
-
-          {/* Navigacija */}
           <StyledNav open={menuOpen}>
             <NavLink href="/aboutus">O nama</NavLink>
             <CategoriesDropdown />
             <NavLink href="/products">Svi proizvodi</NavLink>
-            {/* Obrisali smo Korpu iz ovog dela jer je sada ikonca iznad */}
+            <NavLink href="/cart">Korpa ({cartProducts?.length || 0})</NavLink>
 
             {isLoggedIn ? (
               <LoginButton href="/account">
