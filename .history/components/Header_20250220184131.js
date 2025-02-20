@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 
 const StyledNav = styled.nav`
   display: flex;
-  gap: 20px; /* Veći razmak među stavkama u meniju */
+  gap: 30px; /* Veći razmak među stavkama u meniju */
   align-items: center;
 
   @media (max-width: 768px) {
