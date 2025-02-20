@@ -68,23 +68,16 @@ const ButtonsWrapper = styled.div`
   }
 `;
 const ImageWrapper = styled.div`
-  width: 35vw; /* 35% širine ekrana */
-  height: 35vw; /* Održava kvadratne dimenzije */
-  max-width: 300px; /* Maksimalna veličina slike */
-  max-height: 300px;
-  border-radius: 50%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Sprečava razvlačenje slike */
+    border-radius: 50%;
+    max-width: 100%;
+
+    @media (max-width: 768px) {
+      max-width: 100%;
+      margin: 0 auto;
+    }
   }
 `;
-
 
 export default function Featured({ product }) {
   const { addProduct } = useContext(CartContext);

@@ -68,23 +68,19 @@ const ButtonsWrapper = styled.div`
   }
 `;
 const ImageWrapper = styled.div`
-  width: 35vw; /* 35% širine ekrana */
-  height: 35vw; /* Održava kvadratne dimenzije */
-  max-width: 300px; /* Maksimalna veličina slike */
-  max-height: 300px;
-  border-radius: 50%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+position: relative;
+  width: 300px;  /* Postavi željenu širinu */
+  height: 300px; /* Postavi željenu visinu */
   img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Sprečava razvlačenje slike */
+    border-radius: 50%;
+    max-width: 100%;
+
+    @media (max-width: 768px) {
+      max-width: 70%;
+      margin: 0 auto;
+    }
   }
 `;
-
 
 export default function Featured({ product }) {
   const { addProduct } = useContext(CartContext);
@@ -100,8 +96,8 @@ export default function Featured({ product }) {
               <Image
                 src="https://dimitrije-next-ecommerce.s3.amazonaws.com/1739893983845.jpg"
                 alt="image"
-                width={300}
-                height={300}
+                layout="fill"
+                objectFit="cover"
               />
             </ImageWrapper>
           </Column>
