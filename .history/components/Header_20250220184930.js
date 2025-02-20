@@ -23,9 +23,8 @@ const Wrapper = styled.div`
 
 const StyledNav = styled.nav`
   display: flex;
-  gap: 20px; /* Veći razmak među stavkama u meniju */
+  gap: 30px; /* Veći razmak među stavkama u meniju */
   align-items: center;
-  overflow: visible
 
   @media (max-width: 768px) {
     display: ${(props) => (props.open ? "flex" : "none")};
@@ -50,7 +49,7 @@ const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   transition: color 0.3s ease;
-  
+  overflow: visible
 
   &:hover {
     color: #fff;
