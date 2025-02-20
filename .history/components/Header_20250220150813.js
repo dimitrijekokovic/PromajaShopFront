@@ -44,7 +44,7 @@ const StyledNav = styled.nav`
 const NavLink = styled(Link)`
   color: #bbbbbb;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 500;
   display: flex;
   align-items: center;
