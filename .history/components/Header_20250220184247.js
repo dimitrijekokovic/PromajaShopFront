@@ -10,7 +10,7 @@ import CategoriesDropdown from "./CategoriesDropdown";
 const StyledHeader = styled.header`
   background-color: #222;
   color: #FFA500;
-  padding: 25px 40px; /* Više prostora na desktopu da se ne zbiju stavke */
+  padding: 35px 25px; /* Više prostora na desktopu da se ne zbiju stavke */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 `;
 
@@ -45,7 +45,7 @@ const NavLink = styled(Link)`
   color: #bbbbbb;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   display: flex;
   align-items: center;
   transition: color 0.3s ease;
