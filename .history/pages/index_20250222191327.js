@@ -23,11 +23,11 @@ export default function HomePage({featuredProduct, newProducts}) {
   return (
     <div>
       <Header />
-      {featuredProduct ? <Featured product={featuredProduct} /> : null}
-      {newProducts.length > 0 ? <NewProducts products={newProducts} /> : null}
+      <Featured product={featuredProduct}/>
+      <NewProducts products={newProducts} />
       <CategoriesSection categories={categories} />
       <BlogSection />
-      <Footer />
+      <Footer></Footer>
     </div>
   );
 }

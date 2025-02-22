@@ -23,7 +23,9 @@ export default function HomePage({featuredProduct, newProducts}) {
   return (
     <div>
       <Header />
+      {/* Proveravamo da li postoji featuredProduct pre nego što prikažemo */}
       {featuredProduct ? <Featured product={featuredProduct} /> : null}
+      {/* Ako nema novih proizvoda, ne prikazujemo praznu sekciju */}
       {newProducts.length > 0 ? <NewProducts products={newProducts} /> : null}
       <CategoriesSection categories={categories} />
       <BlogSection />

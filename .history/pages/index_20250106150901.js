@@ -23,11 +23,11 @@ export default function HomePage({featuredProduct, newProducts}) {
   return (
     <div>
       <Header />
-      {featuredProduct ? <Featured product={featuredProduct} /> : null}
-      {newProducts.length > 0 ? <NewProducts products={newProducts} /> : null}
+      <Featured product={featuredProduct}/>
+      <NewProducts products={newProducts} />
       <CategoriesSection categories={categories} />
       <BlogSection />
-      <Footer />
+      <Footer></Footer>
     </div>
   );
 }
@@ -35,14 +35,14 @@ export default function HomePage({featuredProduct, newProducts}) {
 export async function getStaticProps() {
   const featuredProductId = '675620f7a9b40bd2e2c288dc';
   await mongooseConnect();
-  const featuredProduct = await Product.findOne().sort({ _id: -1 });
-  const newProducts = await Product.find({}, null, { sort: { _id: -1 }, limit: 8 });
+  const featuredProduct = await Product.findById(featuredProductId);
+  const newProducts = await Product.find({}, null, { sort: { '_id': -1 }, limit: 8 });
 
   return {
     props: {
-      featuredProduct: featuredProduct ? JSON.parse(JSON.stringify(featuredProduct)) : null,
-      newProducts: newProducts.length > 0 ? JSON.parse(JSON.stringify(newProducts)) : [],
+      featuredProduct: JSON.parse(JSON.stringify(featuredProduct)),
+      newProducts: JSON.parse(JSON.stringify(newProducts)),
     },
-    revalidate: 10, // Osvežava podatke svakih 10 sekundi
+    revalidate: 60, // Osvežava podatke svakih 60 sekundi
   };
 }

@@ -23,11 +23,11 @@ export default function HomePage({featuredProduct, newProducts}) {
   return (
     <div>
       <Header />
-      {featuredProduct ? <Featured product={featuredProduct} /> : null}
-      {newProducts.length > 0 ? <NewProducts products={newProducts} /> : null}
+      <Featured product={featuredProduct}/>
+      <NewProducts products={newProducts} />
       <CategoriesSection categories={categories} />
       <BlogSection />
-      <Footer />
+      <Footer></Footer>
     </div>
   );
 }
@@ -40,9 +40,9 @@ export async function getStaticProps() {
 
   return {
     props: {
-      featuredProduct: featuredProduct ? JSON.parse(JSON.stringify(featuredProduct)) : null,
-      newProducts: newProducts.length > 0 ? JSON.parse(JSON.stringify(newProducts)) : [],
+      featuredProduct: JSON.parse(JSON.stringify(featuredProduct)),
+      newProducts: JSON.parse(JSON.stringify(newProducts)),
     },
-    revalidate: 10, // Osvežava podatke svakih 10 sekundi
+    revalidate: 60, // Osvežava podatke svakih 60 sekundi
   };
 }
