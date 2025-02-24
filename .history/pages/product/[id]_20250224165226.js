@@ -107,7 +107,8 @@ const ReviewsSection = styled.div`
   @media (max-width: 768px) {
     padding: 20px;
     max-width: 100%;
-
+    margin-right:20px;
+    margin-left:20px;
 
   }
 `;
@@ -133,6 +134,7 @@ const SimilarGrid = styled.div`
    @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr); /* 2 kolone na mobilnom */
     gap: 10px; /* Smanjen razmak */
+    padding: 0 15px; /* Dodati padding sa leve i desne strane */
   }
 `;
 
@@ -185,7 +187,9 @@ const ReviewForm = styled.form`
 
  @media (max-width: 768px) {
     max-width: 90%;
+    margin: 0 auto; /* Centriranje */
     padding: 20px;
+    width: auto; /* Da ne bude 100% */
   }
 `;
 
