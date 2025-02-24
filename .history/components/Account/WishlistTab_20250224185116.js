@@ -35,19 +35,16 @@ const WishlistContainer = styled.div`
 const WishlistItem = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Raspoređuje elemente */
-  gap: 15px;
-  padding: 12px;
+  gap: 20px;
+  padding: 15px;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative; /* Neophodno za srce */
-  width: 100%;
 
-  @media (max-width: 768px) {
-    min-height: 70px;
-    padding: 10px;
+   @media (max-width: 768px) {
+    min-height: 70px; /* Osigurava da svi budu iste visine */
+    padding: 10px; /* Smanji padding */
   }
 `;
 
