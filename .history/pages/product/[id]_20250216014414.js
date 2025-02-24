@@ -257,8 +257,6 @@ const ImageWrapper = styled.div`
 const StyledDescription = styled.p`{
   @media (max-width: 768px) {
     text-align:center;
-    margin-left: 20px;
-    margin-right: 20px;
   }
 }`;
 
