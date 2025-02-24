@@ -20,12 +20,12 @@ import Modal, { ModalHeader, ModalText, ButtonWrapper, ModalButton } from "@/com
 
 const WhiteBoxx = styled.div`
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
   text-align: center;
-  max-width: 150px;
-  height: 240px; /* Manja visina */
+  max-width: 200px;
+  height: 300px; /* Postavi istu visinu za sve */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -33,39 +33,22 @@ const WhiteBoxx = styled.div`
   transition: transform 0.2s, box-shadow 0.2s;
 
   &:hover {
-    transform: scale(1.03);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
   img {
-    max-height: 100px; /* Ograničenje visine slike */
+    max-height: 150px; /* Ograniči visinu slike */
     object-fit: contain;
   }
 
-  h3 {
-    font-size: 0.9rem; /* Manja slova */
-    margin: 5px 0;
-  }
-
-  p {
-    font-size: 0.85rem;
-    color: #444;
-  }
-
   @media (max-width: 768px) {
-    max-width: 120px;
-    height: 220px; /* Još manje za telefone */
+    max-width: 160px;
     img {
-      max-height: 80px;
+      max-height: 100px;
     }
-    h3 {
-      font-size: 0.8rem;
-    }
-    p {
-      font-size: 0.75rem;
-    }
-  }
 `;
+
 const ColWrapper = styled.div`
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;
@@ -143,15 +126,14 @@ const SimilarProducts = styled.div`
 
 const SimilarGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Smanjena širina */
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
   justify-content: center;
-  padding: 0 15px;
 
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr); /* Prikaz 2 po redu */
-    gap: 8px; /* Manji razmak */
-    padding: 0 10px;
+   @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr); /* 2 kolone na mobilnom */
+    gap: 10px; /* Smanjen razmak */
+    padding: 0 15px; /* Dodati padding sa leve i desne strane */
   }
 `;
 
