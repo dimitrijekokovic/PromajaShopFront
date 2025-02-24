@@ -60,6 +60,8 @@ const ColWrapper = styled.div`
     gap: 20px;
     width: 100%;
     text-align:center;
+    margin-right:20px;
+    margin-left:20px;
   }
 `;
 
@@ -105,8 +107,7 @@ const ReviewsSection = styled.div`
   @media (max-width: 768px) {
     padding: 20px;
     max-width: 100%;
-    margin-right:20px;
-    margin-left:20px;
+
 
   }
 `;
@@ -132,7 +133,6 @@ const SimilarGrid = styled.div`
    @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr); /* 2 kolone na mobilnom */
     gap: 10px; /* Smanjen razmak */
-    padding: 0 15px; /* Dodati padding sa leve i desne strane */
   }
 `;
 
@@ -185,9 +185,7 @@ const ReviewForm = styled.form`
 
  @media (max-width: 768px) {
     max-width: 90%;
-    margin: 0 auto; /* Centriranje */
     padding: 20px;
-    width: auto; /* Da ne bude 100% */
   }
 `;
 
@@ -257,6 +255,8 @@ const ImageWrapper = styled.div`
 const StyledDescription = styled.p`{
   @media (max-width: 768px) {
     text-align:center;
+    margin-left: 20px;
+    margin-right: 20px;
   }
 }`;
 
@@ -339,6 +339,7 @@ export default function ProductPage({ product, similarProducts }) {
       <Header />
       <Center>
         <Breadcrumb items={breadcrumbItems} />
+
         <ColWrapper>
 
       <ImageWrapper >
