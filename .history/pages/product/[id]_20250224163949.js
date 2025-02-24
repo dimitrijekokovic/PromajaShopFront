@@ -60,9 +60,6 @@ const ColWrapper = styled.div`
     gap: 20px;
     width: 100%;
     text-align:center;
-    margin
-    margin-right:20px;
-    margin-left:20px;
   }
 `;
 
@@ -344,7 +341,6 @@ export default function ProductPage({ product, similarProducts }) {
       <Header />
       <Center>
         <Breadcrumb items={breadcrumbItems} />
-
         <ColWrapper>
 
       <ImageWrapper >
