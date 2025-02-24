@@ -9,14 +9,6 @@ const InfoContainer = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   padding: 20px;
-  width: 100%;
-  max-width: 400px; /* Ograničava širinu na većim ekranima */
-  margin: auto; /* Centriranje na svim uređajima */
-
-  @media (max-width: 768px) {
-    padding: 15px;
-    max-width: 90%;
-  }
 `;
 
 const InfoHeader = styled.div`
@@ -24,33 +16,23 @@ const InfoHeader = styled.div`
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
   color: black;
-  margin-bottom: 15px;
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
+  margin-bottom: 20px;
 `;
 
 const InfoRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: 10px 15px;
   background: #f9f9f9;
   border-radius: 10px;
   margin-bottom: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   font-size: 16px;
   color: #333;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-    padding: 8px;
-  }
 
   svg {
     color: #f97316;
@@ -70,19 +52,9 @@ const LogoutButton = styled.button`
   margin-top: 20px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  width: 100%; /* Dugme širine 100% na telefonima */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
 
   &:hover {
     background-color: #d32f2f;
-  }
-
-  @media (max-width: 768px) {
-    padding: 12px;
-    font-size: 14px;
   }
 `;
 
