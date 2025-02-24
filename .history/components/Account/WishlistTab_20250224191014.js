@@ -34,7 +34,7 @@ const WishlistContainer = styled.div`
 `;
 
 const WishlistItem = styled.div`
-  display: flex;
+  display: grid;
   align-items: center;
   gap: 10px;
   padding: 12px;

@@ -32,9 +32,9 @@ const WishlistContainer = styled.div`
   background: #f9f9f9;
   border-radius: 10px;
 `;
-
+s
 const WishlistItem = styled.div`
-  display: flex;
+  display: grid;
   align-items: center;
   gap: 10px;
   padding: 12px;
