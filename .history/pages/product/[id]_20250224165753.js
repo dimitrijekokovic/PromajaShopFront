@@ -133,7 +133,6 @@ const SimilarGrid = styled.div`
    @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr); /* 2 kolone na mobilnom */
     gap: 10px; /* Smanjen razmak */
-    padding: 0 15px; /* Dodati padding sa leve i desne strane */
   }
 `;
 

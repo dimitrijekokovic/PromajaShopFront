@@ -60,8 +60,6 @@ const ColWrapper = styled.div`
     gap: 20px;
     width: 100%;
     text-align:center;
-    margin-right:20px;
-    margin-left:20px;
   }
 `;
 
@@ -107,7 +105,8 @@ const ReviewsSection = styled.div`
   @media (max-width: 768px) {
     padding: 20px;
     max-width: 100%;
-
+    margin-right:20px;
+    margin-left:20px;
 
   }
 `;
@@ -258,8 +257,6 @@ const ImageWrapper = styled.div`
 const StyledDescription = styled.p`{
   @media (max-width: 768px) {
     text-align:center;
-    margin-left: 20px;
-    margin-right: 20px;
   }
 }`;
 
@@ -342,7 +339,6 @@ export default function ProductPage({ product, similarProducts }) {
       <Header />
       <Center>
         <Breadcrumb items={breadcrumbItems} />
-
         <ColWrapper>
 
       <ImageWrapper >
