@@ -20,7 +20,6 @@ const RemoveButton = styled.button`
     top: 50%;
     transform: translateY(-50%); /* Centriraj srce */
     z-index: 10; /* Osiguraj da bude iznad */
-        font-size: 1rem; /* Smanji ikonu srca na telefonima */
   }
 `;
 
