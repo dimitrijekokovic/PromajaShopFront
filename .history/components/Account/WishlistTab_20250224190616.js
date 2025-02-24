@@ -67,7 +67,6 @@ const ProductImage = styled.img`
 
 const ProductInfo = styled.div`
   flex: 1;
-  margin-left:10px;
 `;
 
 const ProductTitle = styled.h3`
