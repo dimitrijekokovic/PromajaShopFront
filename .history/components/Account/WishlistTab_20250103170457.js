@@ -14,12 +14,6 @@ const RemoveButton = styled.button`
   &:hover {
     color: #d62828;
   }
-    @media (max-width: 768px) {
-    position: absolute;
-    right: 10px; /* Pomeri skroz desno */
-    top: 50%;
-    transform: translateY(-50%); /* Centriraj vertikalno */
-  }
 `;
 
 const WishlistContainer = styled.div`
@@ -40,11 +34,6 @@ const WishlistItem = styled.div`
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
-   @media (max-width: 768px) {
-    min-height: 70px; /* Osigurava da svi budu iste visine */
-    padding: 10px; /* Smanji padding */
-  }
 `;
 
 const ProductImage = styled.img`
@@ -52,10 +41,6 @@ const ProductImage = styled.img`
   height: 80px;
   object-fit: cover;
   border-radius: 10px;
-  @media (max-width: 768px) {
-    width: 50px;  /* Smanji sliku na telefonima */
-    height: 50px;
-  }
 `;
 
 const ProductInfo = styled.div`

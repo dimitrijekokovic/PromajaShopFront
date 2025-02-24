@@ -40,11 +40,6 @@ const WishlistItem = styled.div`
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
-   @media (max-width: 768px) {
-    min-height: 70px; /* Osigurava da svi budu iste visine */
-    padding: 10px; /* Smanji padding */
-  }
 `;
 
 const ProductImage = styled.img`
