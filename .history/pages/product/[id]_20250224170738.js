@@ -374,7 +374,7 @@ export default function ProductPage({ product, similarProducts }) {
 
 
 
-          <InfoBox>
+          <div>
             <Title>{product.title}</Title>
             <StyledDescription >{product.description}</StyledDescription >
             <PriceRow>
@@ -398,7 +398,7 @@ export default function ProductPage({ product, similarProducts }) {
                 <CartIcon /> {isOutOfStock ? "Nema na stanju" : "Dodaj u korpu"}
               </Button>
             </PriceRow>
-          </InfoBox>
+          </div>
         </ColWrapper>
 
         <ReviewsSection>
