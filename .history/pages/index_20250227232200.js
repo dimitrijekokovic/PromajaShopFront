@@ -49,9 +49,8 @@ export async function getStaticProps() {
   const subcategoryIds = subcategories.map(sub => sub._id);
   console.log("Podkategorije kompleta:", subcategoryIds);
   const packageProducts = await Product.find({
-    category: { $in: [kompletiCategoryId, ...subcategoryIds] }
+    category: { $in: ["67bc69cd6f8b77e08f97f244", "67bc6a115a3b96848e5f917"] }
   });
-  
   
 
   console.log("Pronađeni paketi varalica:", packageProducts);
