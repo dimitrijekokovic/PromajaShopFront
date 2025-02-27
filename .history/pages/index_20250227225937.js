@@ -40,10 +40,11 @@ export async function getStaticProps() {
   await mongooseConnect();
   const featuredProduct = await Product.findOne().sort({ _id: -1 });
   const newProducts = await Product.find({}, null, { sort: { _id: -1 }, limit: 8 });
-  
-  const kompletiCategoryId = new mongoose.Types.ObjectId("67bc69cd6f8b77e08f97f244"); // ObjectId kategorije "Kompleti"
+  const packageProducts = await Product.find({ category: "kompleti" }, null, {
+    sort: { _id: -1 },
+    limit: 4, 
+  });
 
-  const packageProducts = await Product.find({ category: kompletiCategoryId });
   return {
     props: {
       featuredProduct: featuredProduct ? JSON.parse(JSON.stringify(featuredProduct)) : null,
