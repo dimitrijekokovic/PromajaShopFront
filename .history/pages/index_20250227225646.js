@@ -39,9 +39,11 @@ export async function getStaticProps() {
   await mongooseConnect();
   const featuredProduct = await Product.findOne().sort({ _id: -1 });
   const newProducts = await Product.find({}, null, { sort: { _id: -1 }, limit: 8 });
+
+  // Upit za proizvode koji su u kategoriji "Kompleti"
   const packageProducts = await Product.find({ category: "kompleti" }, null, {
     sort: { _id: -1 },
-    limit: 4, 
+    limit: 4, // Prikazujemo samo 4 proizvoda
   });
 
   return {

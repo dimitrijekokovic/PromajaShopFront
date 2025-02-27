@@ -35,22 +35,16 @@ export default function HomePage({featuredProduct, newProducts}) {
 }
 
 export async function getStaticProps() {
-  const featuredProductId = "675620f7a9b40bd2e2c288dc";
+  const featuredProductId = '675620f7a9b40bd2e2c288dc';
   await mongooseConnect();
   const featuredProduct = await Product.findOne().sort({ _id: -1 });
   const newProducts = await Product.find({}, null, { sort: { _id: -1 }, limit: 8 });
-  const packageProducts = await Product.find({ category: "kompleti" }, null, {
-    sort: { _id: -1 },
-    limit: 4, 
-  });
 
   return {
     props: {
       featuredProduct: featuredProduct ? JSON.parse(JSON.stringify(featuredProduct)) : null,
       newProducts: newProducts.length > 0 ? JSON.parse(JSON.stringify(newProducts)) : [],
-      packageProducts: packageProducts.length > 0 ? JSON.parse(JSON.stringify(packageProducts)) : [],
     },
-    revalidate: 5, // Osvežava podatke svakih 5 sekundi
+    revalidate: 5, // Osvežava podatke svakih 10 sekundi
   };
 }
-
