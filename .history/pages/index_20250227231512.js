@@ -42,12 +42,22 @@ export default function HomePage({ featuredProduct, newProducts, packageProducts
 export async function getStaticProps() {
   await mongooseConnect();
   const featuredProductId = "675620f7a9b40bd2e2c288dc";
+  // Uzimamo najnoviji proizvod kao "featured"
   const featuredProduct = await Product.findOne().sort({ _id: -1 });
+
+  // Uzimamo 8 najnovijih proizvoda
   const newProducts = await Product.find({}, null, { sort: { _id: -1 }, limit: 8 });
+
+  // ID glavne kategorije "Kompleti"
   const kompletiCategoryId = new mongoose.Types.ObjectId("67bc69cd6f8b77e08f97f244");
+
+  // Pronalazimo sve podkategorije "Kompleta"
   const subcategories = await Category.find({ parent: kompletiCategoryId });
   const subcategoryIds = subcategories.map(sub => sub._id);
+
   console.log("Podkategorije kompleta:", subcategoryIds);
+
+  // Pronalazimo proizvode koji pripadaju "Kompletima" ili bilo kojoj podkategoriji
   const packageProducts = await Product.find({
     category: { $in: [kompletiCategoryId, ...subcategoryIds] }
   });

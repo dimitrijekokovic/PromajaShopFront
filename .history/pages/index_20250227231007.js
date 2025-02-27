@@ -2,15 +2,18 @@ import Featured from "@/components/Featured";
 import Header from "@/components/Header";
 import mongooseConnect from "@/lib/mongoose";
 import { Product } from "@/models/Product";
-import { Category } from "@/models/Category"; // Dodao import za kategorije
 import NewProducts from "@/components/NewProducts";
-import CategoriesSection from "@/components/CategoriesSection";
+import Categories from "@/components/CategoriesSection";
 import BlogSection from "@/components/BlogSection";
 import Footer from "@/components/Footer";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { getProductsByCategory } from "@/utils/api";
+import CategoriesSection from "@/components/CategoriesSection";
 import LurePackages from "@/components/LurePackages";
 import mongoose from "mongoose";
 
-export default function HomePage({ featuredProduct, newProducts, packageProducts }) {
+export default function HomePage({featuredProduct, newProducts, packageProducts }) {
   const categories = [
     { name: "Vobleri", slug: "vobleri", image: "/vobleri.png" },
     { name: "Twitchevi", slug: "twitchevi", image: "/twitchevi.png" },
@@ -19,20 +22,17 @@ export default function HomePage({ featuredProduct, newProducts, packageProducts
     { name: "Majice", slug: "majice", image: "/majice.png" },
     { name: "Glavinjare", slug: "glavinjare", image: "/glavinjare.png" },
   ];
-
   return (
     <div>
       <Header />
-      {featuredProduct && <Featured product={featuredProduct} />}
-      {newProducts.length > 0 && <NewProducts products={newProducts} />}
+      {featuredProduct ? <Featured product={featuredProduct} /> : null}
+      {newProducts.length > 0 ? <NewProducts products={newProducts} /> : null}
       <CategoriesSection categories={categories} />
-      
-      {packageProducts.length > 0 ? (
-        <LurePackages products={packageProducts} />
-      ) : (
-        <p>Nema paketa varalica za prikaz</p>
-      )}
-
+      {packageProducts && packageProducts.length > 0 ? (
+  <LurePackages products={packageProducts} />
+) : (
+  <p>Nema paketa varalica za prikaz</p>
+)}
       <BlogSection />
       <Footer />
     </div>
@@ -40,20 +40,12 @@ export default function HomePage({ featuredProduct, newProducts, packageProducts
 }
 
 export async function getStaticProps() {
-  await mongooseConnect();
   const featuredProductId = "675620f7a9b40bd2e2c288dc";
+  await mongooseConnect();
   const featuredProduct = await Product.findOne().sort({ _id: -1 });
   const newProducts = await Product.find({}, null, { sort: { _id: -1 }, limit: 8 });
-  const kompletiCategoryId = new mongoose.Types.ObjectId("67bc69cd6f8b77e08f97f244");
-  const subcategories = await Category.find({ parent: kompletiCategoryId });
-  const subcategoryIds = subcategories.map(sub => sub._id);
-  console.log("Podkategorije kompleta:", subcategoryIds);
-  const packageProducts = await Product.find({
-    category: { $in: [kompletiCategoryId, ...subcategoryIds] }
-  });
-
-  console.log("Pronađeni paketi varalica:", packageProducts);
-
+  const kompletiCategoryId = new mongoose.Types.ObjectId("67bc69cd6f8b77e08f97f244"); // ObjectId kategorije "Kompleti"
+  const packageProducts = await Product.find({ category: kompletiCategoryId });
   return {
     props: {
       featuredProduct: featuredProduct ? JSON.parse(JSON.stringify(featuredProduct)) : null,
@@ -63,3 +55,4 @@ export async function getStaticProps() {
     revalidate: 5, // Osvežava podatke svakih 5 sekundi
   };
 }
+
