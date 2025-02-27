@@ -44,10 +44,9 @@ export async function getStaticProps() {
   const featuredProductId = "675620f7a9b40bd2e2c288dc";
   const featuredProduct = await Product.findOne().sort({ _id: -1 });
   const newProducts = await Product.find({}, null, { sort: { _id: -1 }, limit: 8 });
-  const kompletiCategoryId = new mongoose.Types.ObjectId("67bc69cd6f8b77e08f972f44"); // PRAVI ID!
-const subcategories = await Category.find({ parent: kompletiCategoryId });
-const subcategoryIds = subcategories.map(sub => sub._id);
-
+  const kompletiCategoryId = new mongoose.Types.ObjectId("67bc69cd6f8b77e08f97f244");
+  const subcategories = await Category.find({ parent: kompletiCategoryId });
+  const subcategoryIds = subcategories.map(sub => sub._id);
   console.log("Podkategorije kompleta:", subcategoryIds);
   const packageProducts = await Product.find({
     category: { $in: [kompletiCategoryId, ...subcategoryIds] }
