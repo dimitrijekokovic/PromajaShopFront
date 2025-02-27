@@ -53,6 +53,9 @@ export async function getStaticProps() {
     category: { $in: [kompletiCategoryId, ...subcategoryIds] }
   });
   
+  
+  
+
   console.log("Pronađeni paketi varalica:", packageProducts);
 
   return {
