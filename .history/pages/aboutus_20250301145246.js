@@ -209,13 +209,13 @@ export default function AboutUs() {
     </SwiperSlide>
     <SwiperSlide>
       <img
-        src="/slika5.jpg" /* Ako imaš treću sliku, dodaj je ovde ili ukloni ovaj deo */
+        src="/slika3.jpg" /* Ako imaš treću sliku, dodaj je ovde ili ukloni ovaj deo */
         alt="Treća slika"
       />
     </SwiperSlide>
     <SwiperSlide>
       <img
-        src="/slika6.jpg" /* Ako imaš treću sliku, dodaj je ovde ili ukloni ovaj deo */
+        src="/slika4.jpg" /* Ako imaš treću sliku, dodaj je ovde ili ukloni ovaj deo */
         alt="Cetvrta slika"
       />
     </SwiperSlide>
