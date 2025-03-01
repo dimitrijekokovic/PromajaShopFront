@@ -87,16 +87,16 @@ export default function BlogPost() {
   <ul>
     <li><strong>Najbolje za:</strong> Smuđa, bucova i soma na dnu</li>
     <li><strong>Prednosti:</strong> Jaka vibracija, stabilan let pri zabačaju, pogodna za duboke vode</li>
-    <li><strong>Preporučena boja:</strong> Plavo-srebrna i Crveno-žuta</li>
+    <li><strong>Preporučena veličina:</strong> Plavo-srebrna i Crveno-žuta</li>
   </ul>
 
   <h3>1. PF Vobler</h3>
   <p>
   PF Vobler je univerzalna varalica koja se pokazala kao izuzetno efikasna u lovu smuđa i bucova. Njegova hidrodinamička silueta omogućava stabilan rad u vodi, dok precizno kalibrisano telo i reflektujuća površina dodatno privlače pažnju ribe čak i u mutnim uslovima. Opremljen je izdržljivim trokrakim udicama i idealan je za različite tehnike povlačenja.</p>
   <ul>
-    <li><strong>Najbolje za:</strong> Smuđa i bucova u svim uslovima</li>
-    <li><strong>Prednosti:</strong> Stabilna akcija, reflektujuća površina, sigurno kačenje</li>
-    <li><strong>Preporučena boja:</strong> Plava i Zelena (Obe)</li>
+    <li><strong>Najbolje za:</strong> Soma i smuđa u dubljim vodama.</li>
+    <li><strong>Prednosti:</strong> Realističan dizajn i izdržljivost.</li>
+    <li><strong>Preporučena veličina:</strong> 10 cm za velike ribe.</li>
   </ul>
 
   <h3>Zaključak</h3>

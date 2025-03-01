@@ -96,7 +96,7 @@ export default function BlogPost() {
   <ul>
     <li><strong>Najbolje za:</strong> Smuđa i bucova u svim uslovima</li>
     <li><strong>Prednosti:</strong> Stabilna akcija, reflektujuća površina, sigurno kačenje</li>
-    <li><strong>Preporučena boja:</strong> Plava i Zelena (Obe)</li>
+    <li><strong>Preporučena boja:</strong> </li>
   </ul>
 
   <h3>Zaključak</h3>

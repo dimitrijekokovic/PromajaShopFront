@@ -55,8 +55,8 @@ export default function BlogPost() {
   </p>
 
   <ul>
-    <li><strong>Najbolje za:</strong> Smuđa i štuku u dubljim vodama</li>
-    <li><strong>Prednosti:</strong> Duboko zaranjanje, jaka vibracija, precizna akcija</li>
+    <li><strong>Najbolje za:</strong> Smuđa i štuku u dubljim vodama.</li>
+    <li><strong>Prednosti:</strong> Duboko zaranjanje, jaka vibracija, precizna akcija.</li>
     <li><strong>Preporučena boja:</strong> Plavo-srebrna i Žuto-crna</li>
   </ul>
 
@@ -66,37 +66,39 @@ export default function BlogPost() {
 </p>
 
   <ul>
-    <li><strong>Najbolje za:</strong> Štuku i bucova u bistroj vodi</li>
-    <li><strong>Prednosti:</strong> Brza i nepredvidiva akcija, odlična kontrola</li>
+    <li><strong>Najbolje za:</strong> Smuđa i bucova u bistroj vodi.</li>
+    <li><strong>Prednosti:</strong> Brza i nepredvidiva akcija, odlična kontrola.</li>
     <li><strong>Preporučena boja:</strong> Plavo-srebrna i Zlatno-crna </li>
   </ul>
 
-  <h3>3. PF Phantom</h3>
+  <h3>3. Keitech Swing Impact (Silikonske varalice)</h3>
   <p>
-  PF Phantom je svestrana varalica sa stabilnim radom i u mirnoj i u tekućoj vodi. Njegov oblik i balans omogućavaju mu prirodno zaranjanje, dok reflektujuća površina dodatno privlači pažnju grabljivica. Opremljen je trokrakim udicama visokog kvaliteta, što osigurava sigurno kačenje.</p>
+    Keitech Swing Impact je izuzetno popularna silikonska varalica među ribolovcima. Njena meka struktura i realističan pokret privlače pažnju riba kao što su smuđ, pastrmka i som. Idealan je za ribolov blizu dna i u vegetacijom bogatim područjima.
+  </p>
   <ul>
-    <li><strong>Najbolje za:</strong> Smuđa i bucova u plićim vodama</li>
-    <li><strong>Prednosti:</strong> Stabilna akcija, reflektujuća površina, prilagodljivost različitim uslovima</li>
-    <li><strong>Preporučena boja:</strong> Plavo-hrom i Sivo-crna</li>
+    <li><strong>Najbolje za:</strong> Smuđa i pastrmku u plićim vodama.</li>
+    <li><strong>Prednosti:</strong> Realističan izgled, fleksibilnost i univerzalnost.</li>
+    <li><strong>Preporučena boja:</strong> Electric Shad i Green Pumpkin.</li>
   </ul>
 
-  <h3>2. SFT Glavinjara</h3>
+  <h3>4. Mepps Aglia (Spinnerbaits)</h3>
   <p>
-  SFT Glavinjara je dizajnirana za ribolov blizu dna, sa izraženom vibracijom koja izaziva napade čak i kod neaktivnih riba. Njena težina i balans omogućavaju daleke i precizne zabačaje, dok oštre trokrake udice obezbeđuju sigurno kačenje. Efikasna je u ribolovu smuđa, štuke i bucova.
-</p>
+    Mepps Aglia je klasik među spinnerbaits varalicama. Njegov bljesak i vibracije su neodoljivi za grabljivice poput štuke i klena. Idealan je za mutne vode i ribolov u brzim tokovima reka.
+  </p>
   <ul>
-    <li><strong>Najbolje za:</strong> Smuđa, bucova i soma na dnu</li>
-    <li><strong>Prednosti:</strong> Jaka vibracija, stabilan let pri zabačaju, pogodna za duboke vode</li>
-    <li><strong>Preporučena boja:</strong> Plavo-srebrna i Crveno-žuta</li>
+    <li><strong>Najbolje za:</strong> Štuku i klena u mutnim vodama.</li>
+    <li><strong>Prednosti:</strong> Pouzdanost i efikasnost u raznim uslovima.</li>
+    <li><strong>Preporučena veličina:</strong> #3 i #4 za veće ribe.</li>
   </ul>
 
-  <h3>1. PF Vobler</h3>
+  <h3>5. Savage Gear 3D Crayfish (Glavinjare)</h3>
   <p>
-  PF Vobler je univerzalna varalica koja se pokazala kao izuzetno efikasna u lovu smuđa i bucova. Njegova hidrodinamička silueta omogućava stabilan rad u vodi, dok precizno kalibrisano telo i reflektujuća površina dodatno privlače pažnju ribe čak i u mutnim uslovima. Opremljen je izdržljivim trokrakim udicama i idealan je za različite tehnike povlačenja.</p>
+    Savage Gear 3D Crayfish je savršena varalica za lov na dnu. Njegov realističan dizajn imitira rakove, što ga čini idealnim za soma i smuđa. Ova varalica pruža odlične rezultate u dubljim vodama i tokom hladnijih perioda.
+  </p>
   <ul>
-    <li><strong>Najbolje za:</strong> Smuđa i bucova u svim uslovima</li>
-    <li><strong>Prednosti:</strong> Stabilna akcija, reflektujuća površina, sigurno kačenje</li>
-    <li><strong>Preporučena boja:</strong> Plava i Zelena (Obe)</li>
+    <li><strong>Najbolje za:</strong> Soma i smuđa u dubljim vodama.</li>
+    <li><strong>Prednosti:</strong> Realističan dizajn i izdržljivost.</li>
+    <li><strong>Preporučena veličina:</strong> 10 cm za velike ribe.</li>
   </ul>
 
   <h3>Zaključak</h3>
