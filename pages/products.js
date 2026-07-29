@@ -54,6 +54,15 @@ const Pagination = styled.div`
   }
 `;
 
+const EmptyState = styled.div`
+  background: #fff;
+  border-radius: 10px;
+  padding: 32px 20px;
+  text-align: center;
+  color: #444;
+  margin-bottom: 40px;
+`;
+
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -61,7 +70,8 @@ export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
-  const { category } = router.query;
+  const { category, search } = router.query;
+  const searchQuery = typeof search === "string" ? search.trim() : "";
 
   const productsPerPage = isMobile ? 5 : 8;
 
@@ -89,10 +99,37 @@ export default function ProductsPage() {
     }
   }, [category]);
 
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, searchQuery, productsPerPage]);
+
+  const normalizeSearchText = (value) =>
+    String(value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+  const normalizedSearch = normalizeSearchText(searchQuery);
+  const filteredProducts = normalizedSearch
+    ? products.filter((product) => {
+        const title = normalizeSearchText(product.title);
+        const titleWords = title.split(/\s+/).filter(Boolean);
+        const searchWords = normalizedSearch.split(/\s+/).filter(Boolean);
+
+        return searchWords.every((word, index) =>
+          titleWords[index]?.startsWith(word)
+        );
+      })
+    : products;
+
+  const pageTitle = searchQuery
+    ? `Pretraga: "${searchQuery}"`
+    : categoryName;
+
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / productsPerPage));
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const currentProducts = products.slice(startIndex, endIndex);
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     if (page > 0 && page <= totalPages) {
@@ -123,37 +160,43 @@ export default function ProductsPage() {
     <>
       <Header />
       <Center>
-        <Title>{categoryName}</Title>
-        <ProductsGrid products={currentProducts} />
-        <Pagination>
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            &#171; Nazad
-          </button>
-          {getVisiblePages().map((page, index) =>
-            page === "..." ? (
-              <button key={index} className="dots">
-                ...
-              </button>
-            ) : (
-              <button
-                key={index}
-                onClick={() => handlePageChange(page)}
-                className={currentPage === page ? "active" : ""}
-              >
-                {page}
-              </button>
-            )
-          )}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Napred &#187;
-          </button>
-        </Pagination>
+        <Title>{pageTitle}</Title>
+        {currentProducts.length > 0 ? (
+          <ProductsGrid products={currentProducts} />
+        ) : (
+          <EmptyState>Nema proizvoda za ovu pretragu.</EmptyState>
+        )}
+        {filteredProducts.length > productsPerPage && (
+          <Pagination>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              &#171; Nazad
+            </button>
+            {getVisiblePages().map((page, index) =>
+              page === "..." ? (
+                <button key={index} className="dots">
+                  ...
+                </button>
+              ) : (
+                <button
+                  key={index}
+                  onClick={() => handlePageChange(page)}
+                  className={currentPage === page ? "active" : ""}
+                >
+                  {page}
+                </button>
+              )
+            )}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Napred &#187;
+            </button>
+          </Pagination>
+        )}
       </Center>
       <Footer />
     </>

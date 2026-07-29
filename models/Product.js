@@ -7,6 +7,8 @@ const ProductSchema = new Schema({
     images: [{ type: String }],
     category: { type: mongoose.Types.ObjectId, ref: "Category" }, // Mora referisati ispravnu kategoriju
     properties: { type: Object },
+    stock: { type: Number, default: 0 },
+    isExclusive: { type: Boolean, default: false },
 }, { timestamps: true });
 
 export const Product = models.Product || model("Product", ProductSchema);

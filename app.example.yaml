@@ -1,0 +1,26 @@
+runtime: nodejs22
+env: standard
+
+entrypoint: npm run start -- -p $PORT
+
+instance_class: F2
+
+automatic_scaling:
+  min_instances: 0
+  max_instances: 2
+
+build_env_variables:
+  MONGODB_URI: "YOUR_MONGODB_URI"
+
+env_variables:
+  MONGODB_URI: "YOUR_MONGODB_URI"
+  GMAIL_USER: "YOUR_GMAIL_USER"
+  GMAIL_PASS: "YOUR_GMAIL_PASS"
+  MAIL_FROM: "YOUR_MAIL_FROM"
+  NEXT_PUBLIC_BASE_URL: "https://metal-being-452613-q4.lm.r.appspot.com"
+  JWT_SECRET: "YOUR_JWT_SECRET"
+
+handlers:
+  - url: /.*
+    secure: always
+    script: auto

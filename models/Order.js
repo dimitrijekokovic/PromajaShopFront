@@ -9,6 +9,7 @@ const OrderSchema = new mongoose.Schema({
   streetAddress: { type: String, required: true },
   country: { type: String, required: true },
   products: [{ type: mongoose.Schema.Types.Mixed, required: true }],
+  total: { type: Number, default: 0 },
   status: { type: String, default: 'U toku...' },
   createdAt: { type: Date, default: Date.now },
 });

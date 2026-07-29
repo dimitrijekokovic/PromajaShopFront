@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
 import blogPosts from "@/data/blogPosts"; // Staticki podaci o blogovima
 import Center from "./Center";
 import { useState, useEffect } from "react";
@@ -59,7 +60,7 @@ const BlogCard = styled.div`
   }
 `;
 
-const BlogImage = styled.img`
+const BlogImage = styled(Image)`
   width: 100%;
   height: 200px;
   object-fit: cover;
@@ -133,7 +134,13 @@ export default function BlogSection() {
           {visiblePosts.map((post) => (
             <StyledLink href={`/blog/${post.id}`} key={post.id}>
               <BlogCard>
-                <BlogImage src={post.image} alt={post.title} />
+                <BlogImage
+                  src={post.image}
+                  alt={post.title}
+                  width={420}
+                  height={220}
+                  sizes="(max-width: 480px) 80vw, (max-width: 768px) 45vw, 320px"
+                />
                 <BlogContent>
                   <h3>{post.title}</h3>
                   <p>{post.content.slice(0, 100)}...</p>

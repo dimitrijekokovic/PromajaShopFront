@@ -94,9 +94,9 @@ const ImageWrapper = styled.div`
 
 
 export default function Featured({ product }) {
-  const { addProduct } = useContext(CartContext);
+  const { addProductWithLimit } = useContext(CartContext);
   function addFeaturedToCart() {
-    addProduct(product._id);
+    addProductWithLimit(product._id, product.stock);
   }
   return (
     <Bg>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import Header from "@/components/Header";
 import Center from "@/components/Center";
@@ -7,7 +8,6 @@ import InfoTab from "@/components/Account/InfoTab";
 import OrdersTab from "@/components/Account/OrdersTab";
 import SettingsTab from "@/components/Account/SettingsTab";
 import WishlistTab from "@/components/Account/WishlistTab";
-import axios from "axios";
 import { FaInfoCircle, FaBoxOpen, FaCogs, FaHeart } from "react-icons/fa";
 import Footer from "@/components/Footer";
 
@@ -15,7 +15,7 @@ const Container = styled.div`
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  
+
   @media (max-width: 768px) {
     padding: 15px;
   }
@@ -40,8 +40,8 @@ const Tabs = styled.div`
 const Tab = styled.button`
   flex: 1;
   padding: 12px;
-  background-color: ${(props) => (props.active ? "#f97316" : "#fff")};
-  color: ${(props) => (props.active ? "#fff" : "#333")};
+  background-color: ${({ $active }) => ($active ? "#f97316" : "#fff")};
+  color: ${({ $active }) => ($active ? "#fff" : "#333")};
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -72,7 +72,7 @@ const ContentWrapper = styled.div`
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  
+
   @media (max-width: 768px) {
     padding: 15px;
   }
@@ -80,47 +80,41 @@ const ContentWrapper = styled.div`
 
 export default function AccountPage() {
   const [activeTab, setActiveTab] = useState("info");
-  const [orders, setOrders] = useState([]);
   const [userEmail, setUserEmail] = useState(null);
   const [userPhone, setUserPhone] = useState(null);
   const [userName, setUserName] = useState(null);
   const [registrationDate, setRegistrationDate] = useState(null);
+  const router = useRouter();
 
-  const handleTabChange = (tab) => setActiveTab(tab);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userFromStorage = localStorage.getItem("user");
+
+    if (!token || !userFromStorage || userFromStorage === "undefined") {
+      router.push("/login");
+      return;
+    }
+
+    try {
+      const parsedUser = JSON.parse(userFromStorage);
+      const fullName = [parsedUser.firstName, parsedUser.lastName].filter(Boolean).join(" ");
+
+      setUserEmail(parsedUser.email || "Nepoznato");
+      setUserPhone(parsedUser.phoneNumber || "Nepoznato");
+      setUserName(fullName || parsedUser.name || parsedUser.email || "Nepoznato");
+      setRegistrationDate(parsedUser.registrationDate || "Nepoznato");
+    } catch {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      router.push("/login");
+    }
+  }, [router]);
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
-    window.location.href = "/"; 
+    router.push("/login");
   };
-
-  useEffect(() => {
-    const userFromStorage = localStorage.getItem("user");
-    if (userFromStorage && userFromStorage !== "undefined") {
-      try {
-        const parsedUser = JSON.parse(userFromStorage);
-        setUserEmail(parsedUser.email || "Nepoznato");
-        setUserPhone(parsedUser.phoneNumber || "Nepoznato");
-        setUserName(`${parsedUser.firstName} ${parsedUser.lastName}` || "Nepoznato");
-        setRegistrationDate(parsedUser.registrationDate || "Nepoznato");
-      } catch (e) {
-        console.error("Neispravan JSON u localStorage:", e);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (userEmail) {
-      const fetchOrders = async () => {
-        try {
-          const response = await axios.get(`/api/orders?email=${userEmail}`);
-          setOrders(response.data.orders || []);
-        } catch (error) {
-          console.error("Greška prilikom povlačenja porudžbina:", error);
-        }
-      };
-      fetchOrders();
-    }
-  }, [userEmail]);
 
   return (
     <>
@@ -129,16 +123,16 @@ export default function AccountPage() {
         <Container>
           <Title>Dobrodošli na Vaš nalog</Title>
           <Tabs>
-            <Tab active={activeTab === "info"} onClick={() => handleTabChange("info")}>
+            <Tab $active={activeTab === "info"} onClick={() => setActiveTab("info")}>
               <FaInfoCircle /> Informacije
             </Tab>
-            <Tab active={activeTab === "orders"} onClick={() => handleTabChange("orders")}>
+            <Tab $active={activeTab === "orders"} onClick={() => setActiveTab("orders")}>
               <FaBoxOpen /> Porudžbine
             </Tab>
-            <Tab active={activeTab === "settings"} onClick={() => handleTabChange("settings")}>
+            <Tab $active={activeTab === "settings"} onClick={() => setActiveTab("settings")}>
               <FaCogs /> Podešavanja
             </Tab>
-            <Tab active={activeTab === "wishlist"} onClick={() => handleTabChange("wishlist")}>
+            <Tab $active={activeTab === "wishlist"} onClick={() => setActiveTab("wishlist")}>
               <FaHeart /> Lista želja
             </Tab>
           </Tabs>
@@ -153,7 +147,7 @@ export default function AccountPage() {
                 handleLogout={handleLogout}
               />
             )}
-            {activeTab === "orders" && <OrdersTab orders={orders} userEmail={userEmail} />}
+            {activeTab === "orders" && <OrdersTab userEmail={userEmail} />}
             {activeTab === "settings" && <SettingsTab />}
             {activeTab === "wishlist" && <WishlistTab />}
           </ContentWrapper>

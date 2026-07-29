@@ -95,7 +95,8 @@ export default function RegisterPage() {
       const response = await axios.post("/api/customAuth/register", formData);
 
       if (response && response.data) {
-        localStorage.setItem("user", JSON.stringify(formData));
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
         window.dispatchEvent(new Event("storage"));
         router.push("/login");
       } else {

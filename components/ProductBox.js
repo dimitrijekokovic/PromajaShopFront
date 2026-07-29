@@ -96,7 +96,7 @@ export default function ProductBox({
   stock,
 }) {
   const [isFavorite, setIsFavorite] = useState(false);
-  const { addProduct } = useCart();
+  const { addProductWithLimit, cartProducts } = useCart();
 
   const url = `/product/${_id}`;
 
@@ -125,6 +125,10 @@ export default function ProductBox({
 
   const isOutOfStock = stock === 0;
   const isLowStock = stock > 0 && stock <= 2;
+  const cartQuantity = cartProducts?.filter((id) => id === _id).length || 0;
+  const hasStockLimit = Number.isFinite(Number(stock));
+  const reachedStockLimit = hasStockLimit && stock > 0 && cartQuantity >= stock;
+  const cannotAdd = isOutOfStock || reachedStockLimit;
 
   return (
     <ProductWrapper>
@@ -139,7 +143,13 @@ export default function ProductBox({
           >
             <FaHeart />
           </FavoriteIcon>
-          <Image src={images[0]} alt={title} layout="intrinsic" objectFit="contain" />
+          <Image
+            src={images?.[0] || "/logo.png"}
+            alt={title || "Product image"}
+            width={300}
+            height={300}
+            style={{ objectFit: "contain" }}
+          />
           {(isOutOfStock || isLowStock) && (
             <StockMessageWrapper isLowStock={isLowStock}>
               {isOutOfStock ? "Nema na stanju!" : "Još malo pa nestalo!"}
@@ -152,10 +162,11 @@ export default function ProductBox({
         <PriceRow>
           <Price>{price},00rsd</Price>
           <StyledButton
-            onClick={() => addProduct(_id)}
+            onClick={() => addProductWithLimit(_id, stock)}
             primary
             outline
-            disabled={isOutOfStock}
+            disabled={cannotAdd}
+            title={reachedStockLimit ? "U korpi je već maksimalna dostupna količina" : undefined}
           >
             <CartIcon />
           </StyledButton>

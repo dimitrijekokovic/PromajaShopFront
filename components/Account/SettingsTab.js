@@ -42,21 +42,32 @@ const Input = styled.input`
 const Button = styled.button`
   width: 90%;
   padding: 0.75rem;
-  background-color: #ff7a00;
+  background-color: ${({ disabled }) => (disabled ? "#d1d5db" : "#ff7a00")};
   color: white;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: background-color 0.2s ease, transform 0.15s ease;
 
   &:hover {
-    background-color: #e56b00;
+    background-color: ${({ disabled }) => (disabled ? "#d1d5db" : "#e56b00")};
+  }
+
+  &:active {
+    transform: ${({ disabled }) => (disabled ? "none" : "translateY(1px)")};
   }
 `;
 
 const Message = styled.p`
-  margin-top: 10px;
-  color: ${({ success }) => (success ? "green" : "red")};
+  width: min(400px, 100%);
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: ${({ $success }) => ($success ? "#ecfdf5" : "#fef2f2")};
+  color: ${({ $success }) => ($success ? "#047857" : "#b91c1c")};
+  text-align: center;
+  font-weight: 600;
 `;
 
 export default function SettingsTab() {
@@ -65,27 +76,37 @@ export default function SettingsTab() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
 
+    if (newPassword.length < 6) {
+      setMessage("Nova lozinka mora imati najmanje 6 karaktera.");
+      setIsSuccess(false);
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
-      setMessage("Lozinke se ne poklapaju!");
+      setMessage("Lozinke se ne poklapaju.");
       setIsSuccess(false);
       return;
     }
 
     try {
-      const token = localStorage.getItem("token"); // Uzimanje tokena iz localStorage
+      setIsSubmitting(true);
+      const token = localStorage.getItem("token");
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
       const response = await axios.post("/api/customAuth/changePassword", {
         token,
+        email: storedUser?.email,
         currentPassword,
         newPassword,
       });
 
       if (response.status === 200) {
-        setMessage("Lozinka je uspešno promenjena!");
+        setMessage("Lozinka je uspešno promenjena.");
         setIsSuccess(true);
         setCurrentPassword("");
         setNewPassword("");
@@ -94,6 +115,8 @@ export default function SettingsTab() {
     } catch (err) {
       setMessage(err.response?.data?.error || "Greška prilikom promene lozinke.");
       setIsSuccess(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -122,9 +145,11 @@ export default function SettingsTab() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        <Button type="submit">Promeni lozinku</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Čuvanje..." : "Promeni lozinku"}
+        </Button>
       </FormWrapper>
-      {message && <Message success={isSuccess}>{message}</Message>}
+      {message && <Message $success={isSuccess}>{message}</Message>}
     </Container>
   );
 }

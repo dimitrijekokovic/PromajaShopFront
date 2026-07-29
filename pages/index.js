@@ -1,5 +1,5 @@
-import Featured from "@/components/Featured";
 import Header from "@/components/Header";
+import HeroSlider from "@/components/HeroSlider";
 import mongooseConnect from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { Category } from "@/models/Category"; // Dodao import za kategorije
@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import LurePackages from "@/components/LurePackages";
 import mongoose from "mongoose";
 
-export default function HomePage({ featuredProduct, newProducts, packageProducts }) {
+export default function HomePage({ newProducts, packageProducts }) {
   const categories = [
     { name: "Vobleri", slug: "vobleri", image: "/vobleri.png" },
     { name: "Twitchevi", slug: "twitchevi", image: "/twitchevi.png" },
@@ -23,7 +23,7 @@ export default function HomePage({ featuredProduct, newProducts, packageProducts
   return (
     <div>
       <Header />
-      {featuredProduct && <Featured product={featuredProduct} />}
+      <HeroSlider />
       {newProducts.length > 0 && <NewProducts products={newProducts} />}
       <CategoriesSection categories={categories} />
       
@@ -41,26 +41,28 @@ export default function HomePage({ featuredProduct, newProducts, packageProducts
 
 export async function getStaticProps() {
   await mongooseConnect();
-  const featuredProductId = "67c087894054d1bc4cf45a8b";
-  const featuredProduct = await Product.findById(featuredProductId);
-  const newProducts = await Product.find({}, null, { sort: { _id: -1 }, limit: 8 });
+  const newProducts = await Product.find({})
+    .sort({ _id: -1 })
+    .limit(8)
+    .select("title price images stock category")
+    .lean();
   const kompletiCategoryId = new mongoose.Types.ObjectId("67bc69cd6f8b77e08f972f44"); // PRAVI ID!
-  const subcategories = await Category.find({ parent: kompletiCategoryId });
+  const subcategories = await Category.find({ parent: kompletiCategoryId })
+    .select("_id")
+    .lean();
   const subcategoryIds = subcategories.map(sub => sub._id);
 
-  console.log("Podkategorije kompleta:", subcategoryIds);
   const packageProducts = await Product.find({
     category: { $in: [kompletiCategoryId, ...subcategoryIds] }
-  });
-  
-  console.log("Pronađeni paketi varalica:", packageProducts);
+  })
+    .select("title price images stock category")
+    .lean();
 
   return {
     props: {
-      featuredProduct: featuredProduct ? JSON.parse(JSON.stringify(featuredProduct)) : null,
       newProducts: newProducts.length > 0 ? JSON.parse(JSON.stringify(newProducts)) : [],
       packageProducts: packageProducts.length > 0 ? JSON.parse(JSON.stringify(packageProducts)) : [],
     },
-    revalidate: 5, // Osvežava podatke svakih 5 sekundi
+    revalidate: 60, // Osvezava podatke jednom u minutu.
   };
 }

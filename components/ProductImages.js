@@ -1,47 +1,34 @@
 import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
+import Image from "next/image";
+import styled from "styled-components";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  width: 100%;
 `;
 
 const BigImageContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width: 400px;
-  height: auto;
+  max-width: 460px;
+  aspect-ratio: 4 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background-color: #f9f9f9;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 
   @media (max-width: 768px) {
     max-width: 100%;
-    width: 100%;
-    height: auto;
-    display: block;
-    text-align: center;
-  }
-`;
-
-const BigImage = styled.img`
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  max-width: 100%;
-  display: block;
-  margin: auto;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
+    aspect-ratio: 1.12 / 1;
+    border-radius: 10px;
   }
 `;
 
@@ -49,17 +36,23 @@ const ArrowButton = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
+  width: 40px;
+  height: 40px;
+  background: rgba(34, 34, 34, 0.58);
   border: none;
   border-radius: 50%;
   color: #fff;
-  padding: 10px;
+  padding: 0;
   cursor: pointer;
   z-index: 10;
-  transition: background 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease, transform 0.25s ease;
 
   &:hover {
     background: #f7934b;
+    transform: translateY(-50%) scale(1.04);
   }
 
   ${({ direction }) => direction === "left" && `left: 10px;`}
@@ -68,56 +61,54 @@ const ArrowButton = styled.button`
 
 const ThumbnailsContainer = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
-  overflow: hidden;
+  flex-wrap: wrap;
+  width: 100%;
 `;
 
-const Thumbnail = styled.img`
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
+const Thumbnail = styled(Image)`
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
   cursor: pointer;
-  border: 2px solid transparent;
-  border-radius: 5px;
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  background: #fff;
+  padding: 7px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
-    transform: scale(1.1);
+    transform: translateY(-2px);
     border-color: #f7934b;
   }
 
-  ${({ active }) =>
-    active &&
+  ${({ $active }) =>
+    $active &&
     `
     border-color: #f7934b;
+    box-shadow: 0 6px 16px rgba(247, 147, 75, 0.22);
   `}
+
+  @media (max-width: 768px) {
+    width: 62px;
+    height: 62px;
+    border-radius: 9px;
+    padding: 6px;
+  }
 `;
 
 const ImageWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 100%;
+  position: absolute;
+  inset: 28px 34px;
   overflow: hidden;
 
-  img {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
-
   @media (max-width: 768px) {
-    padding: 10px;
+    inset: 20px 22px;
   }
 `;
 
-const StyledImage = styled.img`
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  display: block;
+const StyledImage = styled(Image)`
   object-fit: contain;
 `;
 
@@ -156,7 +147,13 @@ const ProductImages = ({ images }) => {
           </ArrowButton>
         )}
 <ImageWrapper>
-  <StyledImage src={images[currentIndex]} alt="Product image" />
+  <StyledImage
+    src={images[currentIndex]}
+    alt="Product image"
+    fill
+    priority
+    sizes="(max-width: 768px) 88vw, 420px"
+  />
 </ImageWrapper>
         {images.length > 1 && (
           <ArrowButton direction="right" onClick={handleNext}>
@@ -172,7 +169,10 @@ const ProductImages = ({ images }) => {
               key={realIndex}
               src={image}
               alt={`Thumbnail ${realIndex}`}
-              active={realIndex === currentIndex}
+              width={120}
+              height={120}
+              sizes="72px"
+              $active={realIndex === currentIndex}
               onClick={() => setCurrentIndex(realIndex)}
             />
           );

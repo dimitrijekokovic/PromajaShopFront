@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import Title from "@/components/Title";
 import mongooseConnect from "@/lib/mongoose";
 import { Product } from "@/models/Product";
-import { Category } from "@/models/Category";
 import styled from "styled-components";
 import WhiteBox from "@/components/WhiteBox";
 import ProductImages from "@/components/ProductImages";
@@ -16,6 +15,7 @@ import Footer from "@/components/Footer";
 import axios from "axios";
 import ReviewCard from "@/components/ReviewCard";
 import Link from "next/link";
+import Image from "next/image";
 import Modal, { ModalHeader, ModalText, ButtonWrapper, ModalButton } from "@/components/Modal";
 
 const WhiteBoxx = styled.div`
@@ -68,51 +68,70 @@ const WhiteBoxx = styled.div`
 `;
 const ColWrapper = styled.div`
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
-  gap: 40px;
-  margin-top: 10px;
+  grid-template-columns: minmax(320px, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(28px, 5vw, 52px);
+  align-items: start;
+  margin-top: 18px;
+  margin-bottom: 34px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
     width: 100%;
-    text-align:center;
+    text-align: left;
     
   }
 `;
 
 const PriceRow = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 16px;
   align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 
   @media (max-width: 768px) {
     flex-direction: column;
-    justify-content: center; /* Ravnomerno raspoređuje */
-    align-items: center;
+    align-items: stretch;
+    gap: 14px;
   }
 `;
 
 const Price = styled.p`
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 10px;
+  font-size: 1.35rem;
+  line-height: 1;
+  font-weight: 800;
+  margin: 0;
   color: #000;
 
   @media (max-width: 768px) {
-    font-size:2rem;
+    font-size: 1.65rem;
   }
 `;
 
 const InfoBox = styled.div`
-  margin-top: 20px;
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  padding: clamp(24px, 3vw, 34px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: linear-gradient(180deg, #f7934b, #222);
+  }
+
   @media (max-width: 768px) {
-    margin-right:20px;
-    margin-left:20px;
+    margin: 0 14px;
+    padding: 24px 20px;
+    border-radius: 10px;
 
   }
 `;
@@ -256,15 +275,13 @@ const StyledLink = styled.a`
   }
 `;
 const ImageWrapper = styled.div`
-  padding-top:10px;
-  padding-right:20px;
-  
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  align-self: start;
   width: 100%;
-  max-width: 400px;
-  margin: auto;
+  max-width: 480px;
+  margin: 16px auto 0;
   
   img {
     max-width: 100%;
@@ -273,18 +290,62 @@ const ImageWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
-    max-width: 90%; /* Smanjuje širinu na 90% kako bi bilo prostora sa obe strane */
-    margin-left: 20px;
-    margin-right: auto;
+    max-width: calc(100% - 28px);
+    margin: 0 auto;
   }
 `;
-const StyledDescription = styled.p`{
+const ProductTitle = styled(Title)`
+  margin: 0 0 22px;
+  font-size: clamp(2rem, 4vw, 2.65rem);
+  line-height: 1.06;
+  letter-spacing: 0;
+
   @media (max-width: 768px) {
-    text-align:center;
-    margin-left: 20px;
-    margin-right: 20px;
+    font-size: 2rem;
+    margin-bottom: 18px;
   }
-}`;
+`;
+
+const StyledDescription = styled.p`
+  margin: 0;
+  color: #252525;
+  font-size: 1rem;
+  line-height: 1.68;
+
+  @media (max-width: 768px) {
+    font-size: 0.96rem;
+    line-height: 1.62;
+    text-align: left;
+  }
+`;
+
+const AddToCartButton = styled(Button)`
+  border: none;
+  border-radius: 7px;
+  padding: 12px 18px;
+  min-height: 46px;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: ${({ disabled }) =>
+    disabled ? "none" : "0 8px 18px rgba(247, 147, 75, 0.28)"};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+
+  &:hover {
+    transform: ${({ disabled }) => (disabled ? "none" : "translateY(-1px)")};
+  }
+
+  &:disabled {
+    background: #d6d6d6;
+    border-color: #d6d6d6;
+    color: #666;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    min-height: 50px;
+  }
+`;
 
 const ReviewsContainer = styled.div`
   @media (max-width: 768px) {
@@ -296,14 +357,13 @@ const ReviewsContainer = styled.div`
 
 
 export default function ProductPage({ product, similarProducts }) {
-  const { addProduct } = useContext(CartContext);
+  const { addProductWithLimit, cartProducts, user } = useContext(CartContext);
   const [reviews, setReviews] = useState([]);
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false); // Dodato za modal
-  const { user } = useContext(CartContext);
   const reviewsPerPage = 3;
   const lastReviewIndex = currentPage * reviewsPerPage;
   const firstReviewIndex = lastReviewIndex - reviewsPerPage;
@@ -315,7 +375,11 @@ export default function ProductPage({ product, similarProducts }) {
     });
   }, [product._id]);
 
-  const isOutOfStock = product.stock === 0;
+  const productStock = Number(product.stock);
+  const hasStockLimit = Number.isFinite(productStock);
+  const cartQuantity = cartProducts?.filter((id) => id === product._id).length || 0;
+  const isOutOfStock = hasStockLimit && productStock <= 0;
+  const reachedStockLimit = hasStockLimit && productStock > 0 && cartQuantity >= productStock;
 
   
 
@@ -380,28 +444,17 @@ export default function ProductPage({ product, similarProducts }) {
 
 
           <InfoBox>
-            <Title>{product.title}</Title>
+            <ProductTitle>{product.title}</ProductTitle>
             <StyledDescription >{product.description}</StyledDescription >
             <PriceRow>
               <Price>{product.price},00 RSD</Price>
-              <Button
+              <AddToCartButton
                 primary
-                disabled={isOutOfStock}
-                onClick={() => !isOutOfStock && addProduct(product._id)}
-                style={{
-                  backgroundColor: isOutOfStock ? "#ccc" : "#F7934B",
-    color: isOutOfStock ? "#666" : "#fff",
-    border: "none", // Uklanja narandžasti okvir
-    cursor: isOutOfStock ? "not-allowed" : "pointer",
-    boxShadow: isOutOfStock ? "none" : "0 4px 6px rgba(0, 0, 0, 0.1)",
-    padding: "10px 15px",
-    fontSize: "1rem",
-    borderRadius: "5px",
-    transition: "all 0.3s ease",
-                }}
+                disabled={isOutOfStock || reachedStockLimit}
+                onClick={() => !isOutOfStock && !reachedStockLimit && addProductWithLimit(product._id, productStock)}
               >
-                <CartIcon /> {isOutOfStock ? "Nema na stanju" : "Dodaj u korpu"}
-              </Button>
+                <CartIcon /> {isOutOfStock ? "Nema na stanju" : reachedStockLimit ? "Maksimalna količina je u korpi" : "Dodaj u korpu"}
+              </AddToCartButton>
             </PriceRow>
           </InfoBox>
         </ColWrapper>
@@ -476,13 +529,9 @@ export default function ProductPage({ product, similarProducts }) {
             <ModalHeader>Potrebna registracija</ModalHeader>
             <ModalText>Morate biti registrovani kako biste napisali recenziju.</ModalText>
             <ButtonWrapper>
-            <ModalButton primary>
-    <Link href="/register" passHref>
-        <a style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}>
-            Registrujte se
-        </a>
-    </Link>
-</ModalButton>
+            <ModalButton as={Link} href="/register" primary>
+              Registrujte se
+            </ModalButton>
 
             </ButtonWrapper>
           </Modal>
@@ -497,7 +546,14 @@ export default function ProductPage({ product, similarProducts }) {
       <Link key={prod._id} href={`/product/${prod._id}`} passHref legacyBehavior>
         <a style={{ textDecoration: "none", color: "#000", fontWeight: "bold" }}>
           <WhiteBoxx>
-            <img src={prod.images[0]} alt={prod.title} />
+            <Image
+              src={prod.images?.[0] || "/logo.png"}
+              alt={prod.title}
+              width={180}
+              height={140}
+              sizes="(max-width: 768px) 45vw, 150px"
+              style={{ objectFit: "contain", width: "100%", height: "100px" }}
+            />
             <h3>{prod.title}</h3>
             <Price>{prod.price},00 RSD</Price>
           </WhiteBoxx>
@@ -518,11 +574,25 @@ export default function ProductPage({ product, similarProducts }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticPaths() {
+  await mongooseConnect();
+
+  const products = await Product.find({}, { _id: 1 }).lean();
+
+  return {
+    paths: products.map((product) => ({
+      params: { id: product._id.toString() },
+    })),
+    fallback: "blocking",
+  };
+}
+
+export async function getStaticProps(context) {
   try {
     await mongooseConnect();
+    await import("@/models/Category");
 
-    const { id } = context.query;
+    const { id } = context.params;
 
     if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
       return { notFound: true };
@@ -531,27 +601,30 @@ export async function getServerSideProps(context) {
     const product = await Product.findById(id).populate({
       path: "category",
       select: "name slug",
-    });
+    }).lean();
 
     if (!product) {
       return { notFound: true };
     }
 
+    const categoryId = product.category?._id || product.category;
     const similarProducts = await Product.find({
-      category: product.category?._id,
+      category: categoryId,
       _id: { $ne: product._id },
-    }).limit(4);
+    })
+      .select("title price images")
+      .limit(4)
+      .lean();
 
     return {
       props: {
         product: JSON.parse(JSON.stringify(product)),
         similarProducts: JSON.parse(JSON.stringify(similarProducts)),
       },
+      revalidate: 60,
     };
   } catch (error) {
     console.error(error);
-    return {
-      props: {},
-    };
+    return { notFound: true, revalidate: 30 };
   }
 }

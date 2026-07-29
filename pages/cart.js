@@ -10,6 +10,7 @@ import Input from "@/components/Input";
 import Modal, { ModalHeader, ModalText, ButtonWrapper, ModalButton } from "@/components/Modal";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import Image from "next/image";
 
 const ColumnsWrapper = styled.div`
      display: grid;
@@ -190,19 +191,57 @@ const StyledModalButton = styled(ModalButton)`
     }
 `;
 
+function getStockLimit(product) {
+    const stock = Number(product?.stock);
+    return Number.isFinite(stock) ? Math.max(0, stock) : Infinity;
+}
+
+function buildSyncedCartIds(cartIds, products) {
+    const productsById = new Map(products.map((product) => [product._id, product]));
+    const counts = {};
+    const syncedIds = [];
+
+    cartIds.forEach((id) => {
+        const product = productsById.get(id);
+
+        if (!product) {
+            return;
+        }
+
+        const currentQuantity = counts[id] || 0;
+
+        if (currentQuantity >= getStockLimit(product)) {
+            return;
+        }
+
+        counts[id] = currentQuantity + 1;
+        syncedIds.push(id);
+    });
+
+    return syncedIds;
+}
+
+function arraysMatch(first, second) {
+    if (first.length !== second.length) return false;
+    return first.every((item, index) => item === second[index]);
+}
+
 export default function CartPage() {
     const [showModal, setShowModal] = useState(false);
-    const { cartProducts, addProduct, removeProduct, clearCart, user, setUser } = useContext(CartContext);
+    const { cartProducts, addProductWithLimit, removeProduct, clearCart, user, setUser, setCartProducts } = useContext(CartContext);
     const [products, setProducts] = useState([]);
+    const [cartLoading, setCartLoading] = useState(false);
+    const [cartNotice, setCartNotice] = useState("");
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [streetAddress, setStreetAddress] = useState('');
-    const [country, setCountry] = useState('');
+    const [country] = useState('Srbija');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showWarningModal, setShowWarningModal] = useState(false);
+    const [showThankYouModal, setShowThankYouModal] = useState(false);
 
     const handleProceedClick = (e) => {
         e.preventDefault();
@@ -238,20 +277,55 @@ export default function CartPage() {
             }
         }
     }, [user, setUser]);
+
+    useEffect(() => {
+        if (!user?.email) return;
+
+        const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ");
+
+        setEmail(user.email);
+        setName((currentName) => currentName || fullName || user.name || "");
+        setPhoneNumber((currentPhone) => currentPhone || user.phoneNumber || "");
+    }, [user]);
     
 
     useEffect(() => {
         if (cartProducts?.length > 0) {
-            axios.post('/api/cart', { ids: cartProducts }).then(response => {
-                setProducts(response.data);
+            setCartLoading(true);
+            axios.post('/api/products', { ids: cartProducts }).then(response => {
+                const fetchedProducts = Array.isArray(response.data) ? response.data : [];
+                const syncedCartProducts = buildSyncedCartIds(cartProducts, fetchedProducts);
+
+                setProducts(fetchedProducts.filter(product => syncedCartProducts.includes(product._id)));
+
+                if (!arraysMatch(cartProducts, syncedCartProducts)) {
+                    const removedCount = cartProducts.length - syncedCartProducts.length;
+                    setCartProducts(syncedCartProducts);
+                    setCartNotice(
+                        removedCount > 0
+                            ? "Korpa je ažurirana prema trenutnom stanju proizvoda."
+                            : ""
+                    );
+                }
+            }).catch(error => {
+                console.error("Greška prilikom učitavanja korpe:", error);
+                setProducts([]);
+            }).finally(() => {
+                setCartLoading(false);
             });
         } else {
             setProducts([]);
+            setCartNotice("");
+            setCartLoading(false);
         }
-    }, [cartProducts]);
+    }, [cartProducts, setCartProducts]);
 
-    const moreOfThisProduct = (id) => {
-        addProduct(id);
+    const getCartQuantity = (id) => {
+        return cartProducts.filter(productId => productId === id).length;
+    };
+
+    const moreOfThisProduct = (product) => {
+        addProductWithLimit(product._id, product.stock);
     };
 
     const lessOfThisProduct = (id) => {
@@ -267,27 +341,29 @@ export default function CartPage() {
     }
 
     const handleOrderSubmit = async () => {
-        const cartProductsDetailed = cartProducts.reduce((acc, id) => {
-            const existingProduct = acc.find(p => p.productId === id);
-            if (existingProduct) {
-                existingProduct.quantity++;
-            } else {
-                acc.push({ productId: id, quantity: 1 });
-            }
-            return acc;
-        }, []);
+        const cartProductsDetailed = products
+            .map(product => ({
+                productId: product._id,
+                quantity: Math.min(getCartQuantity(product._id), getStockLimit(product)),
+            }))
+            .filter(product => product.quantity > 0);
+
+        if (cartProductsDetailed.length === 0) {
+            clearCart();
+            return;
+        }
 
         const response = await fetch('/api/orders', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name,
-                email,
+                email: user?.email || email,
                 phoneNumber,
                 city,
                 postalCode,
                 streetAddress,
-                country,
+                country: country || "Srbija",
                 cartProducts: cartProductsDetailed,
             }),
         });
@@ -295,6 +371,7 @@ export default function CartPage() {
         if (response.ok) {
             clearCart();
             setShowConfirmModal(false);
+            setShowThankYouModal(true);
         }
     };
 
@@ -303,6 +380,7 @@ export default function CartPage() {
     
 
     let shippingCost = total > 5000 ? 0 : 420;
+    const hasValidCartItems = products.length > 0;
 
     return (
         <>
@@ -336,8 +414,10 @@ export default function CartPage() {
                 <ColumnsWrapper>
                     <Box>
                         <h2>Korpa</h2>
-                        {!cartProducts?.length && <div>Vaša korpa je prazna</div>}
-                        {products?.length > 0 && (
+                        {cartNotice && <p>{cartNotice}</p>}
+                        {cartLoading && <div>Učitavanje korpe...</div>}
+                        {!cartLoading && !hasValidCartItems && <div>Vaša korpa je prazna</div>}
+                        {hasValidCartItems && (
                             <Table>
                                 <thead>
                                     <tr>
@@ -347,26 +427,43 @@ export default function CartPage() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {products.map(product => (
+                                    {products.map(product => {
+                                        const quantity = getCartQuantity(product._id);
+                                        const canAddMore = quantity < getStockLimit(product);
+
+                                        return (
                                         <tr key={product._id}>
                                             <ProductInfoCell>
                                                 <ProductImageBox>
-                                                    <img src={product.images[0]} alt="" />
+                                                    <Image
+                                                        src={product.images?.[0] || "/logo.png"}
+                                                        alt={product.title || "Product image"}
+                                                        width={80}
+                                                        height={80}
+                                                        sizes="80px"
+                                                        style={{ objectFit: "contain" }}
+                                                    />
                                                 </ProductImageBox>
                                                 {product.title}
                                             </ProductInfoCell>
                                             <td>
                                                 <CitHolder>
                                                     <Button onClick={() => lessOfThisProduct(product._id)}>-</Button>
-                                                    {cartProducts.filter(id => id === product._id).length}
-                                                    <Button onClick={() => moreOfThisProduct(product._id)}>+</Button>
+                                                    {quantity}
+                                                    <Button
+                                                        onClick={() => moreOfThisProduct(product)}
+                                                        disabled={!canAddMore}
+                                                        title={!canAddMore ? "Nema vise dostupnih komada na stanju" : undefined}
+                                                    >
+                                                        +
+                                                    </Button>
                                                 </CitHolder>
                                             </td>
                                             <td>
-                                                {cartProducts.filter(id => id === product._id).length * product.price},00 RSD
+                                                {quantity * product.price},00 RSD
                                             </td>
                                         </tr>
-                                    ))}
+                                    )})}
                                     <tr>
                                         <td><b>Ukupan iznos (bez poštarine):</b></td>
                                         <td></td>
@@ -386,17 +483,30 @@ export default function CartPage() {
                             </Table>
                         )}
                     </Box>
-                    {!!cartProducts?.length && (
+                    {hasValidCartItems && (
                         <Box>
                             <h2>Informacija o porudžbini</h2>
                             <form onSubmit={handleProceedClick}>
                                 <Input type="text" placeholder="Ime i prezime" value={name} name="name" onChange={ev => setName(ev.target.value)} required />
-                                <Input type="text" placeholder="Email" value={email} name="email" onChange={ev => setEmail(ev.target.value)} required />
+                                <Input
+                                    type="text"
+                                    placeholder="Email"
+                                    value={email}
+                                    name="email"
+                                    onChange={ev => setEmail(ev.target.value)}
+                                    readOnly={!!user?.email}
+                                    style={user?.email ? {
+                                        backgroundColor: "#f8f9fa",
+                                        color: "#6c757d",
+                                        cursor: "not-allowed",
+                                    } : undefined}
+                                    required
+                                />
                                 <Input type="text" placeholder="Broj telefona" value={phoneNumber} name="phoneNumber" onChange={ev => setPhoneNumber(ev.target.value)} required />
                                 <Input
                                     type="text"
                                     placeholder="Država"
-                                    value="Srbija"
+                                    value={country}
                                     name="country"
                                     readOnly
                                     style={{
@@ -422,13 +532,9 @@ export default function CartPage() {
                     <ModalHeader>Potrebna registracija</ModalHeader>
                     <ModalText>Morate biti registrovani kako biste nastavili sa porudžbinom.</ModalText>
                     <ButtonWrapper>
-                    <ModalButton primary>
-    <Link href="/register" passHref>
-        <a style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>
-            Registrujte se
-        </a>
-    </Link>
-</ModalButton>
+                    <ModalButton as={Link} href="/register" primary>
+                        Registrujte se
+                    </ModalButton>
 
                     </ButtonWrapper>
                 </Modal>
@@ -441,6 +547,11 @@ export default function CartPage() {
                         <ModalButton primary onClick={handleOrderSubmit}>Potvrdi</ModalButton>
                         <ModalButton onClick={() => setShowConfirmModal(false)}>Otkaži</ModalButton>
                     </ButtonWrapper>
+                </Modal>
+            )}
+            {showThankYouModal && (
+                <Modal show={showThankYouModal} onClose={() => setShowThankYouModal(false)}>
+                    <ModalHeader>Hvala na kupovini!</ModalHeader>
                 </Modal>
             )}
             {showWarningModal && (

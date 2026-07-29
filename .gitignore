@@ -31,6 +31,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+app.yaml
 
 # vercel
 .vercel
@@ -41,3 +42,9 @@ next-env.d.ts
 
 .codegpt
 .vercel
+
+# local Codex/dev artifacts
+PROJECT_CONTEXT.md
+image.png
+next-dev.err.log
+next-dev.out.log

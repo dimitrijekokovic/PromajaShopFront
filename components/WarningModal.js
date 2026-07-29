@@ -64,9 +64,9 @@ const Modal = ({ show, onClose }) => {
         <ModalText>Morate biti prijavljeni ili registrovani da biste nastavili sa ovom radnjom.</ModalText>
         <ButtonWrapper>
           <ModalButton onClick={onClose}>Zatvori</ModalButton>
-          <Link href="/register" passHref>
-            <ModalButton primary as="a">Registrujte se</ModalButton>
-          </Link>
+          <ModalButton as={Link} href="/register" primary>
+            Registrujte se
+          </ModalButton>
         </ButtonWrapper>
       </ModalContent>
     </ModalOverlay>
