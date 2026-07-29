@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { CartContextProvider } from "@/components/CartContext";
 import AOS from "aos";
@@ -24,8 +25,35 @@ export default function App({ Component, pageProps, router }) {
     });
   }, []);
 
+  const path = (router.asPath || "/").split("?")[0].split("#")[0];
+  const canonicalPath = path === "/" ? "" : path;
+  const canonicalUrl = `https://www.promajafishing.com${canonicalPath}`;
+
   return (
     <>
+    <Head>
+      <title>Promaja Shop | Ribolovačka oprema i varalice</title>
+      <meta
+        name="description"
+        content="Promaja Shop - ribolovačka oprema, vobleri, varalice, štapovi i paketi za ribolov. Poručite online uz brzu dostavu u Srbiji."
+      />
+      <meta name="robots" content="index, follow" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Promaja Shop" />
+      <meta property="og:title" content="Promaja Shop | Ribolovačka oprema i varalice" />
+      <meta
+        property="og:description"
+        content="Ribolovačka oprema, vobleri, varalice, štapovi i paketi za ribolov."
+      />
+      <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:image" content="https://www.promajafishing.com/logo.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <link rel="canonical" href={canonicalUrl} />
+      <link rel="icon" href="/logo.png" type="image/png" />
+      <link rel="apple-touch-icon" href="/logo.png" />
+      <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    </Head>
     <GlobalStyles />
     <SessionProvider session={pageProps.session}>
       <CartContextProvider>
