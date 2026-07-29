@@ -47,11 +47,12 @@ export default function App({ Component, pageProps, router }) {
         content="Ribolovačka oprema, vobleri, varalice, štapovi i paketi za ribolov."
       />
       <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:image" content="https://www.promajafishing.com/logo.png" />
+      <meta property="og:image" content="https://www.promajafishing.com/site-logo.png" />
       <meta name="twitter:card" content="summary_large_image" />
       <link rel="canonical" href={canonicalUrl} />
-      <link rel="icon" href="/logo.png" type="image/png" />
-      <link rel="apple-touch-icon" href="/logo.png" />
+      <link rel="icon" href="/favicon.png?v=2" type="image/png" />
+      <link rel="shortcut icon" href="/favicon.png?v=2" type="image/png" />
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
       <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     </Head>
     <GlobalStyles />
