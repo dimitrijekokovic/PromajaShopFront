@@ -1,13 +1,11 @@
 import { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import Header from "@/components/Header";
 import AuthLinks from "@/components/AuthLinks";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import Footer from "@/components/Footer";
 
-// Stilizovane komponente
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -101,10 +99,15 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await axios.post("/api/customAuth/login", formData);
+      const response = await fetch("/api/customAuth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json().catch(() => ({}));
 
-      if (response.status === 200) {
-        const { token } = response.data;
+      if (response.ok) {
+        const { token } = data;
         const decoded = jwtDecode(token);
 
         localStorage.setItem("token", token);
@@ -113,10 +116,10 @@ export default function LoginPage() {
         window.dispatchEvent(new Event("storage"));
         router.push("/");
       } else {
-        setError("Došlo je do greške. Pokušajte ponovo.");
+        setError(data.message || "Doslo je do greske. Pokusajte ponovo.");
       }
-    } catch (err) {
-      setError(err.response?.data?.message || "Greška na serveru.");
+    } catch {
+      setError("Greska na serveru.");
     } finally {
       setLoading(false);
     }
@@ -124,36 +127,36 @@ export default function LoginPage() {
 
   return (
     <>
-    <Header />
-    <Container>
-      <FormWrapper>
-        <Title>Prijava</Title>
-        <form onSubmit={handleSubmit}>
-          <Input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            type="password"
-            name="password"
-            placeholder="Lozinka"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <Button type="submit" disabled={loading}>
-            {loading ? "Prijavljivanje..." : "Prijavi se"}
-          </Button>
-          {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-        </form>
-        <AuthLinks type="login" />
-      </FormWrapper>
-    </Container>
-    <Footer />
+      <Header />
+      <Container>
+        <FormWrapper>
+          <Title>Prijava</Title>
+          <form onSubmit={handleSubmit}>
+            <Input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <Input
+              type="password"
+              name="password"
+              placeholder="Lozinka"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <Button type="submit" disabled={loading}>
+              {loading ? "Prijavljivanje..." : "Prijavi se"}
+            </Button>
+            {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+          </form>
+          <AuthLinks type="login" />
+        </FormWrapper>
+      </Container>
+      <Footer />
     </>
   );
 }

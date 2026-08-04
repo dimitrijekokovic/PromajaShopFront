@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
 import styled from "styled-components";
 import ProductsGrid from "@/components/ProductsGrid";
 import Center from "@/components/Center";
 import Title from "@/components/Title";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { getProductListing } from "@/lib/productListing";
+
+const PRODUCTS_PER_PAGE = 8;
 
 const Pagination = styled.div`
   display: flex;
@@ -64,77 +65,31 @@ const EmptyState = styled.div`
 `;
 
 
-export default function ProductsPage() {
-  const [products, setProducts] = useState([]);
-  const [categoryName, setCategoryName] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isMobile, setIsMobile] = useState(false);
+export default function ProductsPage({
+  products,
+  page,
+  totalPages,
+  categoryName,
+  searchQuery,
+}) {
   const router = useRouter();
   const { category, search } = router.query;
-  const searchQuery = typeof search === "string" ? search.trim() : "";
-
-  const productsPerPage = isMobile ? 5 : 8;
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (category) {
-      axios.get(`/api/products?category=${category}`).then((res) => {
-        setProducts(res.data);
-        setCategoryName(category.charAt(0).toUpperCase() + category.slice(1));
-      });
-    } else {
-      axios.get("/api/products").then((res) => {
-        setProducts(res.data);
-        setCategoryName("Svi Proizvodi");
-      });
-    }
-  }, [category]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [category, searchQuery, productsPerPage]);
-
-  const normalizeSearchText = (value) =>
-    String(value || "")
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-
-  const normalizedSearch = normalizeSearchText(searchQuery);
-  const filteredProducts = normalizedSearch
-    ? products.filter((product) => {
-        const title = normalizeSearchText(product.title);
-        const titleWords = title.split(/\s+/).filter(Boolean);
-        const searchWords = normalizedSearch.split(/\s+/).filter(Boolean);
-
-        return searchWords.every((word, index) =>
-          titleWords[index]?.startsWith(word)
-        );
-      })
-    : products;
+  const categoryQuery = typeof category === "string" ? category : "";
+  const searchQueryParam = typeof search === "string" ? search : "";
 
   const pageTitle = searchQuery
     ? `Pretraga: "${searchQuery}"`
     : categoryName;
 
-  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / productsPerPage));
-  const startIndex = (currentPage - 1) * productsPerPage;
-  const endIndex = startIndex + productsPerPage;
-  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+  const handlePageChange = (nextPage) => {
+    if (nextPage > 0 && nextPage <= totalPages && nextPage !== page) {
+      const query = {};
 
-  const handlePageChange = (page) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (categoryQuery) query.category = categoryQuery;
+      if (searchQueryParam) query.search = searchQueryParam;
+      if (nextPage > 1) query.page = nextPage;
+
+      router.push({ pathname: "/products", query }, undefined, { scroll: true });
     }
   };
 
@@ -146,11 +101,11 @@ export default function ProductsPage() {
         pages.push(i);
       }
     } else {
-      if (currentPage > 1) pages.push(1);
-      if (currentPage > 2) pages.push("...");
-      pages.push(currentPage);
-      if (currentPage < totalPages - 1) pages.push("...");
-      if (currentPage < totalPages) pages.push(totalPages);
+      if (page > 1) pages.push(1);
+      if (page > 2) pages.push("...");
+      pages.push(page);
+      if (page < totalPages - 1) pages.push("...");
+      if (page < totalPages) pages.push(totalPages);
     }
 
     return pages;
@@ -161,37 +116,37 @@ export default function ProductsPage() {
       <Header />
       <Center>
         <Title>{pageTitle}</Title>
-        {currentProducts.length > 0 ? (
-          <ProductsGrid products={currentProducts} />
+        {products.length > 0 ? (
+          <ProductsGrid products={products} />
         ) : (
           <EmptyState>Nema proizvoda za ovu pretragu.</EmptyState>
         )}
-        {filteredProducts.length > productsPerPage && (
+        {totalPages > 1 && (
           <Pagination>
             <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
             >
               &#171; Nazad
             </button>
-            {getVisiblePages().map((page, index) =>
-              page === "..." ? (
+            {getVisiblePages().map((visiblePage, index) =>
+              visiblePage === "..." ? (
                 <button key={index} className="dots">
                   ...
                 </button>
               ) : (
                 <button
                   key={index}
-                  onClick={() => handlePageChange(page)}
-                  className={currentPage === page ? "active" : ""}
+                  onClick={() => handlePageChange(visiblePage)}
+                  className={page === visiblePage ? "active" : ""}
                 >
-                  {page}
+                  {visiblePage}
                 </button>
               )
             )}
             <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page === totalPages}
             >
               Napred &#187;
             </button>
@@ -201,4 +156,32 @@ export default function ProductsPage() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps({ query, res }) {
+  const categorySlug = typeof query.category === "string" ? query.category : "";
+  const searchQuery = typeof query.search === "string" ? query.search.trim() : "";
+  const requestedPage = query.page;
+
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=60, stale-while-revalidate=300"
+  );
+
+  const listing = await getProductListing({
+    categorySlug,
+    search: searchQuery,
+    page: requestedPage,
+    limit: PRODUCTS_PER_PAGE,
+  });
+
+  return {
+    props: {
+      products: listing.products,
+      page: listing.page,
+      totalPages: listing.totalPages,
+      categoryName: listing.category?.name || (categorySlug ? categorySlug : "Svi Proizvodi"),
+      searchQuery,
+    },
+  };
 }

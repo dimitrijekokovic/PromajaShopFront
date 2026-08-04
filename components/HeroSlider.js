@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
+import { PF_VOBLER_PRODUCT_IDS } from "@/lib/priorityProducts";
 
 const slides = [
   "/hero/pf-ulov-1.jpg?v=20260803",
@@ -13,19 +15,19 @@ const slides = [
 
 const lures = [
   {
-    href: "/product/6984c47b18c2a7be186204ff",
+    href: `/product/${PF_VOBLER_PRODUCT_IDS[0]}`,
     image: "/pf/pf-vobler-plavi.png",
     alt: "PF Vobler plavi",
     variant: "blue",
   },
   {
-    href: "/product/6984c48e18c2a7be18620506",
+    href: `/product/${PF_VOBLER_PRODUCT_IDS[1]}`,
     image: "/pf/pf-vobler-zuti.png",
     alt: "PF Vobler žuti",
     variant: "yellow",
   },
   {
-    href: "/product/6a15c5a99f65bb4fbbbead31",
+    href: `/product/${PF_VOBLER_PRODUCT_IDS[2]}`,
     image: "/pf/pf-vobler-crni.png",
     alt: "PF Vobler crni",
     variant: "black",
@@ -38,9 +40,6 @@ const Hero = styled.section`
   overflow: hidden;
   background: #111;
   color: #fff;
-  background-image: url("/hero/pf-ulov-1.jpg?v=20260803");
-  background-position: center;
-  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -182,7 +181,7 @@ const LureButton = styled(Link)`
     `}
 `;
 
-const LureImage = styled.img`
+const LureImage = styled(Image)`
   width: 126px;
   height: 38px;
   object-fit: contain;
@@ -221,8 +220,10 @@ const Dot = styled.button`
 `;
 
 export default function HeroSlider() {
+  const router = useRouter();
   const [activeSlide, setActiveSlide] = useState(0);
   const [hasEntered, setHasEntered] = useState(false);
+  const [loadedSlides, setLoadedSlides] = useState([0]);
 
   useEffect(() => {
     const entryFrame = requestAnimationFrame(() => {
@@ -230,7 +231,13 @@ export default function HeroSlider() {
     });
 
     const timer = setInterval(() => {
-      setActiveSlide((current) => (current + 1) % slides.length);
+      setActiveSlide((current) => {
+        const nextSlide = (current + 1) % slides.length;
+        setLoadedSlides((loaded) =>
+          loaded.includes(nextSlide) ? loaded : [...loaded, nextSlide]
+        );
+        return nextSlide;
+      });
     }, 5000);
 
     return () => {
@@ -239,45 +246,99 @@ export default function HeroSlider() {
     };
   }, []);
 
+  useEffect(() => {
+    const nextSlide = (activeSlide + 1) % slides.length;
+    const preloadTimer = setTimeout(() => {
+      setLoadedSlides((loaded) =>
+        loaded.includes(nextSlide) ? loaded : [...loaded, nextSlide]
+      );
+    }, 900);
+
+    return () => clearTimeout(preloadTimer);
+  }, [activeSlide]);
+
+  useEffect(() => {
+    const prefetchHeroProducts = () => {
+      lures.forEach((lure) => {
+        router.prefetch(lure.href).catch(() => {});
+      });
+    };
+
+    if ("requestIdleCallback" in window) {
+      const idleId = window.requestIdleCallback(prefetchHeroProducts, { timeout: 2500 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timer = setTimeout(prefetchHeroProducts, 1200);
+    return () => clearTimeout(timer);
+  }, [router]);
+
+  function prefetchProduct(href) {
+    router.prefetch(href).catch(() => {});
+  }
+
+  function showSlide(index) {
+    setLoadedSlides((loaded) =>
+      loaded.includes(index) ? loaded : [...loaded, index]
+    );
+    setActiveSlide(index);
+  }
+
   return (
     <Hero>
-      {slides.map((slide, index) => (
-        <Slide
-          key={slide}
-          $active={index === activeSlide}
-          $entered={hasEntered}
-        >
-          <SlideImage
-            src={slide}
-            alt=""
-            fill
-            priority={index === 0}
-            loading={index === 0 ? undefined : "eager"}
-            quality={76}
-            sizes="100vw"
-          />
-        </Slide>
-      ))}
+      {slides.map((slide, index) =>
+        loadedSlides.includes(index) ? (
+          <Slide
+            key={slide}
+            $active={index === activeSlide}
+            $entered={hasEntered}
+          >
+            <SlideImage
+              src={slide}
+              alt=""
+              fill
+              priority={index === 0}
+              loading={index === 0 ? undefined : "lazy"}
+              quality={72}
+              sizes="100vw"
+            />
+          </Slide>
+        ) : null
+      )}
       <Overlay />
       <Content>
         <Kicker>Promaja Fishing kolekcija</Kicker>
         <Title>
           PF Vobler
-          <TitleAccent>Dvojac koji lovi trofeje</TitleAccent>
+          <TitleAccent>Tri boje. Jedan cilj.</TitleAccent>
         </Title>
         <Subtitle>
-          <strong>PF Vobler plavi</strong> i <strong>PF Vobler žuti</strong> - dva modela koja
-          pokrivaju sve uslove na vodi i već su dokazala svoju efikasnost.
+          Tri proverena PF modela, napravljena da rade onda kada je najvažnije:
+          prvi zabačaj, težak teren i riba koja ne prašta lošu varalicu.
         </Subtitle>
         <LureButtons>
           {lures.map((lure) => (
-            <LureButton key={lure.href} href={lure.href} $variant={lure.variant}>
-              <LureImage src={lure.image} alt={lure.alt} />
+            <LureButton
+              key={lure.href}
+              href={lure.href}
+              $variant={lure.variant}
+              prefetch
+              onFocus={() => prefetchProduct(lure.href)}
+              onMouseEnter={() => prefetchProduct(lure.href)}
+              onTouchStart={() => prefetchProduct(lure.href)}
+            >
+              <LureImage
+                src={lure.image}
+                alt={lure.alt}
+                width={126}
+                height={38}
+                sizes="126px"
+              />
               <span>Dodaj u korpu</span>
             </LureButton>
           ))}
         </LureButtons>
-        <SmallText>Poruči oba i budi spreman za svaki uslov kada si na vodi.</SmallText>
+        <SmallText>Ne biraj boju po navici. Pusti vodi da kaže koji PF danas lovi.</SmallText>
       </Content>
       <Dots>
         {slides.map((slide, index) => (
@@ -286,7 +347,7 @@ export default function HeroSlider() {
             type="button"
             $active={index === activeSlide}
             aria-label={`Prikaži slajd ${index + 1}`}
-            onClick={() => setActiveSlide(index)}
+            onClick={() => showSlide(index)}
           />
         ))}
       </Dots>

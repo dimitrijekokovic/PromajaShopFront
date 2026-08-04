@@ -1,15 +1,28 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import styled from "styled-components";
 import Header from "@/components/Header";
 import Center from "@/components/Center";
 import Title from "@/components/Title";
 import InfoTab from "@/components/Account/InfoTab";
-import OrdersTab from "@/components/Account/OrdersTab";
-import SettingsTab from "@/components/Account/SettingsTab";
-import WishlistTab from "@/components/Account/WishlistTab";
 import { FaInfoCircle, FaBoxOpen, FaCogs, FaHeart } from "react-icons/fa";
 import Footer from "@/components/Footer";
+
+const OrdersTab = dynamic(() => import("@/components/Account/OrdersTab"), {
+  loading: () => <p>Ucitavanje porudzbina...</p>,
+  ssr: false,
+});
+
+const SettingsTab = dynamic(() => import("@/components/Account/SettingsTab"), {
+  loading: () => <p>Ucitavanje podesavanja...</p>,
+  ssr: false,
+});
+
+const WishlistTab = dynamic(() => import("@/components/Account/WishlistTab"), {
+  loading: () => <p>Ucitavanje liste zelja...</p>,
+  ssr: false,
+});
 
 const Container = styled.div`
   width: 100%;

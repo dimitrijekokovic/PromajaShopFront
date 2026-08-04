@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import AuthLinks from "@/components/AuthLinks";
@@ -101,20 +100,26 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(""); // Resetuj grešku na početku
-    try {
-      const response = await axios.post("/api/customAuth/register", formData);
+    setError("");
 
-      if (response && response.data) {
+    try {
+      const response = await fetch("/api/customAuth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok) {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         window.dispatchEvent(new Event("storage"));
         router.push("/login");
       } else {
-        setError("Greška: Prazan odgovor sa servera.");
+        setError(data.message || "Greska na serveru.");
       }
-    } catch (err) {
-      setError(err.response?.data?.message || "Greška na serveru.");
+    } catch {
+      setError("Greska na serveru.");
     } finally {
       setLoading(false);
     }

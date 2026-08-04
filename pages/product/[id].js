@@ -12,11 +12,11 @@ import { useContext, useState, useEffect } from "react";
 import { CartContext } from "@/components/CartContext";
 import Breadcrumb from "@/components/Breadcrumb";
 import Footer from "@/components/Footer";
-import axios from "axios";
 import ReviewCard from "@/components/ReviewCard";
 import Link from "next/link";
 import Image from "next/image";
 import Modal, { ModalHeader, ModalText, ButtonWrapper, ModalButton } from "@/components/Modal";
+import { PRIORITY_PRODUCT_IDS } from "@/lib/priorityProducts";
 
 const WhiteBoxx = styled.div`
   background: #fff;
@@ -370,9 +370,24 @@ export default function ProductPage({ product, similarProducts }) {
   const currentReviews = reviews.slice(firstReviewIndex, lastReviewIndex);
 
   useEffect(() => {
-    axios.get(`/api/reviews?productId=${product._id}`).then((res) => {
-      setReviews(res.data);
-    });
+    let cancelled = false;
+
+    fetch(`/api/reviews?productId=${product._id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled) {
+          setReviews(Array.isArray(data) ? data : []);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setReviews([]);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [product._id]);
 
   const productStock = Number(product.stock);
@@ -393,7 +408,16 @@ export default function ProductPage({ product, similarProducts }) {
 
     const newReview = { productId: product._id, name, comment, rating };
     try {
-      await axios.post("/api/reviews", newReview);
+      const response = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newReview),
+      });
+
+      if (!response.ok) {
+        throw new Error("Review request failed");
+      }
+
       setName("");
       setComment("");
       setRating(1);
@@ -575,14 +599,14 @@ export default function ProductPage({ product, similarProducts }) {
 }
 
 export async function getStaticPaths() {
-  await mongooseConnect();
-
-  const products = await Product.find({}, { _id: 1 }).lean();
+  const paths = PRIORITY_PRODUCT_IDS.filter((id) =>
+    /^[0-9a-fA-F]{24}$/.test(id)
+  ).map((id) => ({
+    params: { id },
+  }));
 
   return {
-    paths: products.map((product) => ({
-      params: { id: product._id.toString() },
-    })),
+    paths,
     fallback: "blocking",
   };
 }

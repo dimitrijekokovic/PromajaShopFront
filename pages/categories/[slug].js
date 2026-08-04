@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { fetchProductsByCategory } from "@/utils/api";
 import ProductsGrid from "@/components/ProductsGrid";
 import Header from "@/components/Header";
 import Center from "@/components/Center";
 import Footer from "@/components/Footer";
+import { getProductListing } from "@/lib/productListing";
+
+const PRODUCTS_PER_PAGE = 8;
 
 const PageWrapper = styled.div`
   h1 {
@@ -36,57 +37,44 @@ const Pagination = styled.div`
     }
 
     &.active {
-      background-color: #f59051; /* Svetlija narandžasta */
+      background-color: #f59051;
       color: #fff;
 
       @media (max-width: 768px) {
-        background-color: #f58040; /* Još svetlija narandžasta za mobilne uređaje */
+        background-color: #f58040;
       }
     }
   }
 `;
 
-export default function CategoryPage() {
+const EmptyState = styled.div`
+  background: #fff;
+  border-radius: 10px;
+  padding: 32px 20px;
+  text-align: center;
+  color: #444;
+  margin-bottom: 40px;
+`;
+
+export default function CategoryPage({
+  products,
+  page,
+  totalPages,
+  categoryName,
+  slug,
+}) {
   const router = useRouter();
-  const { slug } = router.query;
-  const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
 
-  const productsPerPage = isMobile ? 5 : 8;
+  const handlePageChange = (nextPage) => {
+    if (nextPage > 0 && nextPage <= totalPages && nextPage !== page) {
+      const query = nextPage > 1 ? { page: nextPage } : {};
 
-  useEffect(() => {
-    if (slug) {
-      setLoading(true);
-      fetchProductsByCategory(slug)
-        .then((data) => setProducts(data))
-        .catch((err) => console.error(err))
-        .finally(() => setLoading(false));
+      router.push(
+        { pathname: `/categories/${slug}`, query },
+        undefined,
+        { scroll: true }
+      );
     }
-  }, [slug]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const capitalizeFirstLetter = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
-
-  const startIndex = (currentPage - 1) * productsPerPage;
-  const endIndex = startIndex + productsPerPage;
-  const currentProducts = products.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(products.length / productsPerPage);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
   };
 
   return (
@@ -94,28 +82,53 @@ export default function CategoryPage() {
       <Header />
       <Center>
         <PageWrapper>
-        <h1>{slug ? capitalizeFirstLetter(slug) : ""}</h1>
-          {loading ? (
-            <p>Učitavanje...</p>
+          <h1>{categoryName}</h1>
+          {products.length > 0 ? (
+            <ProductsGrid products={products} />
           ) : (
-            <>
-              <ProductsGrid products={currentProducts} />
-              <Pagination>
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handlePageChange(i + 1)}
-                    className={currentPage === i + 1 ? "active" : ""}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-              </Pagination>
-            </>
+            <EmptyState>Nema proizvoda u ovoj kategoriji.</EmptyState>
+          )}
+          {totalPages > 1 && (
+            <Pagination>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={page === i + 1 ? "active" : ""}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </Pagination>
           )}
         </PageWrapper>
       </Center>
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps({ params, query, res }) {
+  const slug = typeof params?.slug === "string" ? params.slug : "";
+
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=60, stale-while-revalidate=300"
+  );
+
+  const listing = await getProductListing({
+    categorySlug: slug,
+    page: query.page,
+    limit: PRODUCTS_PER_PAGE,
+  });
+
+  return {
+    props: {
+      products: listing.products,
+      page: listing.page,
+      totalPages: listing.totalPages,
+      categoryName: listing.category?.name || slug,
+      slug,
+    },
+  };
 }

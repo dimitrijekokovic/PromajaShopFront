@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -196,33 +197,48 @@ export default function AboutUs() {
     slidesPerView={1}
   >
     <SwiperSlide>
-      <img
-        src="/slika1.jpg" /* Relativna putanja do slike u public folderu */
+      <Image
+        src="/slika1.jpg"
         alt="Prva slika"
+        width={960}
+        height={692}
+        sizes="(max-width: 768px) 100vw, 1100px"
       />
     </SwiperSlide>
     <SwiperSlide>
-      <img
-        src="/slika2.jpg" /* Relativna putanja do slike u public folderu */
+      <Image
+        src="/slika2.jpg"
         alt="Druga slika"
+        width={960}
+        height={1280}
+        sizes="(max-width: 768px) 100vw, 1100px"
       />
     </SwiperSlide>
     <SwiperSlide>
-      <img
-        src="/slika5.jpg" /* Ako imaš treću sliku, dodaj je ovde ili ukloni ovaj deo */
-        alt="Treća slika"
+      <Image
+        src="/slika5.jpg"
+        alt="Treca slika"
+        width={1038}
+        height={591}
+        sizes="(max-width: 768px) 100vw, 1100px"
       />
     </SwiperSlide>
     <SwiperSlide>
-      <img
-        src="/slika6.jpg" /* Ako imaš treću sliku, dodaj je ovde ili ukloni ovaj deo */
+      <Image
+        src="/slika6.jpg"
         alt="Cetvrta slika"
+        width={960}
+        height={1280}
+        sizes="(max-width: 768px) 100vw, 1100px"
       />
     </SwiperSlide>
     <SwiperSlide>
-      <img
-        src="/slika7.jpg" /* Ako imaš treću sliku, dodaj je ovde ili ukloni ovaj deo */
-        alt="Cetvrta slika"
+      <Image
+        src="/slika7.jpg"
+        alt="Peta slika"
+        width={960}
+        height={742}
+        sizes="(max-width: 768px) 100vw, 1100px"
       />
     </SwiperSlide>
   </Swiper>
@@ -248,3 +264,4 @@ export default function AboutUs() {
     </>
   );
 }
+

@@ -3,7 +3,6 @@ import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
 import Table from "@/components/Table";
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Input from "@/components/Input";
@@ -292,8 +291,12 @@ export default function CartPage() {
     useEffect(() => {
         if (cartProducts?.length > 0) {
             setCartLoading(true);
-            axios.post('/api/products', { ids: cartProducts }).then(response => {
-                const fetchedProducts = Array.isArray(response.data) ? response.data : [];
+            fetch("/api/products", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ids: cartProducts }),
+            }).then(response => response.json()).then(data => {
+                const fetchedProducts = Array.isArray(data) ? data : [];
                 const syncedCartProducts = buildSyncedCartIds(cartProducts, fetchedProducts);
 
                 setProducts(fetchedProducts.filter(product => syncedCartProducts.includes(product._id)));
