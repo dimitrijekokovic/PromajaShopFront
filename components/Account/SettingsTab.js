@@ -119,10 +119,8 @@ export default function SettingsTab() {
     try {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
-      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
       const response = await axios.post("/api/customAuth/changePassword", {
         token,
-        email: storedUser?.email,
         currentPassword,
         newPassword,
       });
@@ -135,7 +133,11 @@ export default function SettingsTab() {
         setConfirmPassword("");
       }
     } catch (err) {
-      setMessage(err.response?.data?.error || "Greška prilikom promene lozinke.");
+      setMessage(
+        err.response?.data?.error ||
+          err.response?.data?.message ||
+          "Greška prilikom promene lozinke."
+      );
       setIsSuccess(false);
     } finally {
       setIsSubmitting(false);
