@@ -8,22 +8,29 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 85vh;
-  padding: 0 15px;
+  min-height: calc(100vh - 260px);
+  padding: 48px 24px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    min-height: 85vh;
+    padding: 28px 15px;
+  }
 `;
 
 const FormWrapper = styled.div`
   background: #fff;
-  padding: 2rem;
+  padding: 2.5rem;
   border-radius: 12px;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
   text-align: center;
+  box-sizing: border-box;
 
   @media (max-width: 480px) {
     padding: 1.5rem;
-    max-width: 90%;
+    max-width: 100%;
   }
 `;
 
@@ -34,12 +41,14 @@ const Title = styled.h2`
 `;
 
 const Input = styled.input`
-  width: calc(100% - 20px);
+  width: 100%;
   padding: 12px;
   margin-bottom: 12px;
   border: 1px solid #ddd;
   border-radius: 10px;
   font-size: 1rem;
+  box-sizing: border-box;
+  font-family: inherit;
   transition: border-color 0.3s;
 
   &:focus {
@@ -49,15 +58,17 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  width: calc(100% - 20px);
+  width: 100%;
   padding: 12px;
   background-color: #ff7a00;
   color: white;
   border: none;
   border-radius: 10px;
   font-size: 1rem;
+  font-family: inherit;
   cursor: pointer;
   margin-top: 5px;
+  box-sizing: border-box;
   transition: background 0.3s;
 
   &:hover {

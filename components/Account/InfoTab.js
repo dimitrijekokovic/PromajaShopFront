@@ -7,15 +7,16 @@ const InfoContainer = styled.div`
   background: #fff;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin: auto;
   margin-bottom: 20px;
-  padding: 20px;
+  padding: 22px 20px 20px;
   width: 100%;
-  max-width: 400px; /* Ograničava širinu na većim ekranima */
-  margin: auto; /* Centriranje na svim uređajima */
+  max-width: 440px;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 15px;
-    max-width: 90%;
+    padding: 18px 16px;
+    max-width: 100%;
   }
 `;
 
@@ -35,10 +36,11 @@ const InfoHeader = styled.div`
 `;
 
 const InfoRow = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
-  padding: 10px;
+  gap: 18px;
+  padding: 12px 14px;
   background: #f9f9f9;
   border-radius: 10px;
   margin-bottom: 10px;
@@ -46,15 +48,45 @@ const InfoRow = styled.div`
   font-size: 16px;
   color: #333;
   width: 100%;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     font-size: 14px;
-    padding: 8px;
+    padding: 10px 12px;
+    gap: 12px;
+  }
+
+  @media (max-width: 420px) {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  span {
+    min-width: 0;
+  }
+
+  span:first-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  span:last-child {
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 420px) {
+    span:last-child {
+      text-align: left;
+      padding-left: 26px;
+    }
   }
 
   svg {
     color: #f97316;
     font-size: 1.2rem;
+    flex-shrink: 0;
   }
 `;
 
@@ -70,11 +102,12 @@ const LogoutButton = styled.button`
   margin-top: 20px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  width: 100%; /* Dugme širine 100% na telefonima */
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  box-sizing: border-box;
 
   &:hover {
     background-color: #d32f2f;
@@ -87,12 +120,12 @@ const LogoutButton = styled.button`
 `;
 
 export default function InfoTab({ userEmail, userPhone, userName }) {
-  const router = useRouter(); // Inicijalizacija router-a
+  const router = useRouter();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    router.push("/login"); // Preusmeravanje na stranicu za prijavu
+    router.push("/login");
   };
 
   return (

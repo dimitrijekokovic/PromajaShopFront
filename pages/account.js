@@ -12,33 +12,49 @@ import { FaInfoCircle, FaBoxOpen, FaCogs, FaHeart } from "react-icons/fa";
 import Footer from "@/components/Footer";
 
 const Container = styled.div`
-  padding: 20px;
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1040px;
   margin: 0 auto;
+  padding: 44px 24px 36px;
+  box-sizing: border-box;
+
+  h1 {
+    margin: 0 0 26px;
+    line-height: 1.15;
+  }
 
   @media (max-width: 768px) {
-    padding: 15px;
+    padding: 34px 18px 28px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 28px 14px 24px;
   }
 `;
 
 const Tabs = styled.div`
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
   margin-bottom: 20px;
   background: #f5f5f5;
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 32px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  flex-wrap: wrap;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+
+  @media (max-width: 460px) {
+    grid-template-columns: 1fr;
   }
 `;
 
 const Tab = styled.button`
-  flex: 1;
   padding: 12px;
   background-color: ${({ $active }) => ($active ? "#f97316" : "#fff")};
   color: ${({ $active }) => ($active ? "#fff" : "#333")};
@@ -53,8 +69,8 @@ const Tab = styled.button`
   gap: 10px;
   transition: all 0.3s ease;
   width: 100%;
-  max-width: 180px;
-  margin-bottom: 5px;
+  min-height: 40px;
+  box-sizing: border-box;
 
   &:hover {
     background-color: #f97316;
@@ -62,7 +78,6 @@ const Tab = styled.button`
   }
 
   @media (max-width: 768px) {
-    max-width: 90%;
     padding: 10px;
   }
 `;
@@ -72,6 +87,7 @@ const ContentWrapper = styled.div`
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     padding: 15px;

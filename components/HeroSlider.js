@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 
 const slides = [
-  "/hero/pf-ulov-1.jpg",
-  "/hero/pf-ulov-2.jpg",
-  "/hero/pf-ulov-3.jpg",
-  "/hero/pf-ulov-4.jpg",
-  "/hero/pf-ulov-5.jpg",
-  "/hero/pf-ulov-6.jpg",
+  "/hero/pf-ulov-1.jpg?v=20260803",
+  "/hero/pf-ulov-2.jpg?v=20260803",
+  "/hero/pf-ulov-3.jpg?v=20260803",
+  "/hero/pf-ulov-4.jpg?v=20260803",
+  "/hero/pf-ulov-5.jpg?v=20260803",
 ];
 
 const lures = [
@@ -39,7 +38,7 @@ const Hero = styled.section`
   overflow: hidden;
   background: #111;
   color: #fff;
-  background-image: url("/hero/pf-ulov-1.jpg");
+  background-image: url("/hero/pf-ulov-1.jpg?v=20260803");
   background-position: center;
   background-size: cover;
   display: flex;
@@ -57,7 +56,7 @@ const Slide = styled.div`
   position: absolute;
   inset: 0;
   opacity: ${({ $active }) => ($active ? 1 : 0)};
-  transform: scale(${({ $active }) => ($active ? 1 : 1.04)});
+  transform: scale(${({ $active, $entered }) => ($active && $entered ? 1 : 1.04)});
   transition: opacity 950ms ease, transform 2600ms ease;
   will-change: opacity, transform;
   z-index: -2;
@@ -223,13 +222,21 @@ const Dot = styled.button`
 
 export default function HeroSlider() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [hasEntered, setHasEntered] = useState(false);
 
   useEffect(() => {
+    const entryFrame = requestAnimationFrame(() => {
+      setHasEntered(true);
+    });
+
     const timer = setInterval(() => {
       setActiveSlide((current) => (current + 1) % slides.length);
     }, 5000);
 
-    return () => clearInterval(timer);
+    return () => {
+      cancelAnimationFrame(entryFrame);
+      clearInterval(timer);
+    };
   }, []);
 
   return (
@@ -238,6 +245,7 @@ export default function HeroSlider() {
         <Slide
           key={slide}
           $active={index === activeSlide}
+          $entered={hasEntered}
         >
           <SlideImage
             src={slide}

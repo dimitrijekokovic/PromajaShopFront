@@ -6,32 +6,51 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  gap: 22px;
+  width: 100%;
+  padding: 44px 0;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    gap: 18px;
+    padding: 26px 0;
+  }
 `;
 
 const Title = styled.h2`
-  margin-bottom: 20px;
+  margin: 0;
   color: #333;
   text-align: center;
+  line-height: 1.25;
 `;
 
 const FormWrapper = styled.form`
   background: #fff;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 32px 38px;
   border-radius: 12px;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  max-width: 400px;
   width: 100%;
+  max-width: 464px;
   text-align: center;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 22px 18px;
+    max-width: 100%;
+  }
 `;
 
 const Input = styled.input`
-  width: 90%;
+  width: 100%;
   padding: 0.75rem;
-  margin-bottom: 1rem;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1rem;
+  box-sizing: border-box;
+  font-family: inherit;
 
   &:focus {
     border-color: #ff7a00;
@@ -40,15 +59,17 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  width: 90%;
+  width: 100%;
   padding: 0.75rem;
   background-color: ${({ disabled }) => (disabled ? "#d1d5db" : "#ff7a00")};
   color: white;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
+  font-family: inherit;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   transition: background-color 0.2s ease, transform 0.15s ease;
+  box-sizing: border-box;
 
   &:hover {
     background-color: ${({ disabled }) => (disabled ? "#d1d5db" : "#e56b00")};
@@ -60,14 +81,15 @@ const Button = styled.button`
 `;
 
 const Message = styled.p`
-  width: min(400px, 100%);
-  margin: 14px 0 0;
+  width: min(464px, 100%);
+  margin: 0;
   padding: 12px 14px;
   border-radius: 8px;
   background: ${({ $success }) => ($success ? "#ecfdf5" : "#fef2f2")};
   color: ${({ $success }) => ($success ? "#047857" : "#b91c1c")};
   text-align: center;
   font-weight: 600;
+  box-sizing: border-box;
 `;
 
 export default function SettingsTab() {

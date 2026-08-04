@@ -12,7 +12,14 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70vh;
+  min-height: calc(100vh - 260px);
+  padding: 48px 24px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    min-height: 70vh;
+    padding: 28px 0;
+  }
 `;
 
 const FormWrapper = styled.div`
@@ -20,12 +27,14 @@ const FormWrapper = styled.div`
   padding: 2.5rem;
   border-radius: 12px;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  max-width: 400px;
+  max-width: 480px;
   width: 100%;
   text-align: center;
+  box-sizing: border-box;
+
   @media (max-width: 768px) {
-  margin-left:25px;
-  margin-right:25px;
+    margin-left: 25px;
+    margin-right: 25px;
   }
 `;
 
@@ -36,12 +45,14 @@ const Title = styled.h2`
 `;
 
 const Input = styled.input`
-  width: 90%;
+  width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1rem;
+  box-sizing: border-box;
+  font-family: inherit;
   transition: border-color 0.3s;
 
   &:focus {
@@ -51,15 +62,17 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  width: 90%;
+  width: 100%;
   padding: 0.75rem;
   background-color: #ff7a00;
   color: white;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
+  font-family: inherit;
   cursor: pointer;
   margin-bottom: 1rem;
+  box-sizing: border-box;
 
   &:hover {
     background-color: #e56b00;
