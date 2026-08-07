@@ -382,7 +382,7 @@ export default function CartPage() {
 
     
 
-    let shippingCost = total > 5000 ? 0 : 420;
+    let shippingCost = total > 6000 ? 0 : 480;
     const hasValidCartItems = products.length > 0;
 
     return (
@@ -399,7 +399,7 @@ export default function CartPage() {
                             </svg>
                         </IconWrapper>
                         <span>
-                            Za porudžbine preko <Highlight>5,000 RSD</Highlight>, poštarina je <Highlight>BESPLATNA</Highlight>. Dostava se vrši samo na teritoriji Republike Srbije. Minimalni iznos pojedinačne porudžbine je <Highlight3>1,000 RSD</Highlight3>.
+                            Za porudžbine preko <Highlight>6,000 RSD</Highlight>, poštarina je <Highlight>BESPLATNA</Highlight>. Dostava se vrši samo na teritoriji Republike Srbije. Minimalni iznos pojedinačne porudžbine je <Highlight3>1,000 RSD</Highlight3>.
                         </span>
                     </InfoBox>
                     <InfoBox>
