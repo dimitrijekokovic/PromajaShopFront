@@ -32,6 +32,12 @@ const lures = [
     alt: "PF Vobler crni",
     variant: "black",
   },
+  {
+    href: `/product/${PF_VOBLER_PRODUCT_IDS[3]}`,
+    image: "/pf/pf-vobler-rozi.png",
+    alt: "PF Vobler rozi",
+    variant: "pink",
+  },
 ];
 
 const Hero = styled.section`
@@ -142,6 +148,7 @@ const LureButtons = styled.div`
 const lureBorder = {
   blue: "#18b8e8",
   yellow: "#f1d30a",
+  pink: "#f38ab8",
   black: "rgba(255, 255, 255, 0.55)",
 };
 
@@ -178,6 +185,12 @@ const LureButton = styled(Link)`
     $variant === "yellow" &&
     css`
       background: rgba(65, 62, 0, 0.42);
+    `}
+
+  ${({ $variant }) =>
+    $variant === "pink" &&
+    css`
+      background: rgba(79, 18, 45, 0.42);
     `}
 `;
 
@@ -310,10 +323,10 @@ export default function HeroSlider() {
         <Kicker>Promaja Fishing kolekcija</Kicker>
         <Title>
           PF Vobler
-          <TitleAccent>Tri boje. Jedan cilj.</TitleAccent>
+          <TitleAccent>Četiri boje. Jedan cilj.</TitleAccent>
         </Title>
         <Subtitle>
-          Tri proverena PF modela, napravljena da rade onda kada je najvažnije:
+          Četiri proverena PF modela, napravljena da rade onda kada je najvažnije:
           prvi zabačaj, težak teren i riba koja ne prašta lošu varalicu.
         </Subtitle>
         <LureButtons>
